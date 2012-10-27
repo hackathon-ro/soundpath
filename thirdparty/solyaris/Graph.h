@@ -29,14 +29,11 @@
 #include "cinder/audio/Output.h"
 #include "cinder/audio/Io.h"
 #include "Node.h"
-#include "Edge.h"
 #include "Connection.h"
-#include "Tooltip.h"
 #include "Action.h"
 #include "Configuration.h"
 #include "Defaults.h"
 #include "Resources.h"
-#include "I18N.h"
 #include <vector>
 #include <map>
 
@@ -64,7 +61,7 @@ class Graph {
     void resize(int w, int h, int o);
     void config(Configuration c);
     void defaults(Defaults d);
-    void i18n(I18N tls);
+    void setBackground(string bg);
     
     
     // Sketch
@@ -95,15 +92,12 @@ class Graph {
     NodePtr createNode(string nid, string type);
     NodePtr createNode(string nid, string type, double x, double y);
     NodePtr getNode(string nid);
-    EdgePtr createEdge(string eid, string type, NodePtr n1, NodePtr n2);
-    EdgePtr getEdge(string nid1, string nid2);
     ConnectionPtr createConnection(string cid, string type, NodePtr n1, NodePtr n2);
     ConnectionPtr getConnection(string nid1, string nid2);
     void removeNode(string nid);
     void load(NodePtr n);
     void unload(NodePtr n);
     bool onStage(NodePtr n);
-    void tooltip(int tid);
     void action(int tid);
     void sample(int s);
     
@@ -130,7 +124,6 @@ class Graph {
     
     // data
     NodeVectorPtr nodes;
-    EdgeVectorPtr edges;
     ConnectionVectorPtr connections;
     
     // maps
@@ -160,9 +153,6 @@ class Graph {
     int nbtouch;
     map<int, NodePtr> touched;
     
-    // tooltips
-    map<int, Tooltip> tooltips;
-    
     // actions
     map<int, Action> actions;
     
@@ -172,9 +162,6 @@ class Graph {
     
     // samples
     audio::SourceRef audioSampleClick;
-    
-    // translations
-    I18N translations;
     
 };
 

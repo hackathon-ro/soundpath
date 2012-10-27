@@ -60,10 +60,9 @@ Graph::Graph(int w, int h, int o) {
     // hitarea
     harea = 15;
     
-    // tooltip / action
+    // action
     nbtouch = 10;
     for (int t = 1; t <= nbtouch; t++) {
-        tooltips[t] = Tooltip(Vec2d(w,h));
         actions[t] = Action();
     }
     
@@ -99,13 +98,7 @@ void Graph::resize(int w, int h, int o) {
     
     // orientation
     orientation = o;
-    portrait = (h > w) ? true : false; 
-    
-    
-    // tooltip
-    for (int t = 1; t <= nbtouch; t++) {
-        tooltips[t].resize(w,h);
-    }
+    portrait = (h > w) ? true : false;
     
 }
 
@@ -131,9 +124,8 @@ void Graph::config(Configuration c) {
         retina = confDisplayRetina.boolVal();
     }
     
-    // tooltip / action
+    // action
     for (int t = 1; t <= nbtouch; t++) {
-        tooltips[t].config(conf);
         actions[t].config(conf);
     }
     
@@ -173,6 +165,26 @@ void Graph::config(Configuration c) {
     
 }
 
+void Graph::setBackground(string bg)
+{
+    bg += retina ? "@2x.png" : ".png";
+    
+    // surface
+    Surface surface_portrait = loadImage(loadResource(bg));
+    int surface_w = surface_portrait.getSize().x;
+    int surface_h = surface_portrait.getSize().y;
+    Surface surface_landscape = Surface( surface_h, surface_w, true, SurfaceChannelOrder::RGBA );
+    for (int x = 0; x < surface_w; x++) {
+        for (int y = 0; y < surface_h; y++) {
+            surface_landscape.setPixel(Vec2i(y,x), surface_portrait.getPixel(Vec2i(x,y)));
+        }
+    }
+    
+    // textures
+    bg_portrait = gl::Texture(surface_portrait);
+    bg_landscape = gl::Texture(surface_landscape);
+}
+
 
 /**
  * Applies the settings.
@@ -202,25 +214,12 @@ void Graph::defaults(Defaults d) {
         (*node)->defaults(dflts);
     }
     
-    // apply to edges
-    for (EdgeIt edge = edges.begin(); edge != edges.end(); ++edge) {
-        (*edge)->defaults(dflts);
-    }
-    
     // apply to connections
     for (ConnectionIt connection = connections.begin(); connection != connections.end(); ++connection) {
         (*connection)->defaults(dflts);
     }
     
 }
-
-/**
- * Applies the translations.
- */
-void Graph::i18n(I18N tls) {
-    translations = tls;
-}
-
 
 #pragma mark -
 #pragma mark Sketch
@@ -303,15 +302,6 @@ void Graph::update() {
         
     }
     
-    // edges
-    for (EdgeIt edge = edges.begin(); edge != edges.end(); ++edge) {
-        
-        // active
-        if ((*edge)->isVisible()) {
-            (*edge)->update();
-        }
-    }
-    
     // connections
     for (ConnectionIt connection = connections.begin(); connection != connections.end(); ++connection) {
         
@@ -319,9 +309,8 @@ void Graph::update() {
         (*connection)->update();
     }
     
-    // tooltip / actions
+    // actions
     for (int t = 1; t <= nbtouch; t++) {
-        tooltips[t].update();
         actions[t].update();
     }
 
@@ -341,16 +330,6 @@ void Graph::draw() {
     gl::pushMatrices();
     gl::translate(translate);
     gl::scale(Vec2d(scale,scale));
-    
-    
-    // edges
-    for (EdgeIt edge = edges.begin(); edge != edges.end(); ++edge) {
-        
-        // draw if visible
-        if ((*edge)->isVisible()) {
-            (*edge)->draw();
-        }
-    }
     
     // connections
     for (ConnectionIt connection = connections.begin(); connection != connections.end(); ++connection) {
@@ -375,12 +354,6 @@ void Graph::draw() {
     
     // pop
     gl::popMatrices();
-    
-    
-    // tooltips
-    for (int t = 1; t <= nbtouch; t++) {
-        tooltips[t].draw();
-    }
 
 }
 
@@ -392,8 +365,7 @@ void Graph::reset() {
     DLog();
     
     // clear
-    connections.clear(); 
-    edges.clear(); 
+    connections.clear();
     nodes.clear(); 
     
     // reset maps
@@ -461,10 +433,6 @@ NodePtr Graph::touchBegan(Vec2d tpos, int tid) {
                 // state
                 touched[tid]->touched();
                 
-                // set the tooltip
-                this->tooltip(tid);
-                tooltips[tid].position(tpos);
-                
                 // set the action
                 this->action(tid);
                 
@@ -495,9 +463,6 @@ void Graph::touchMoved(Vec2d tpos, Vec2d ppos, int tid){
         
         // move
         touched[tid]->moveTo(ztpos);
-        
-        // tooltip
-        tooltips[tid].position(tpos);
 
 
     }
@@ -518,9 +483,6 @@ void Graph::touchEnded(Vec2d tpos, int tid){
         // state
         GLog("tid = %d, node = ",tid);
         touched[tid]->untouched();
-        
-        // hide tooltip
-        tooltips[tid].hide();
         
         // hide action
         actions[tid].hide();
@@ -640,15 +602,6 @@ void Graph::attract() {
  * Repulsion.
  */
 void Graph::repulse() {
-    
-    // edges
-    for (EdgeIt edge = edges.begin(); edge != edges.end(); ++edge) {
-        
-        // active
-        if ((*edge)->isActive()) {
-            (*edge)->repulse();
-        }
-    }
     
 }
 
@@ -784,33 +737,12 @@ NodePtr Graph::createNode(string nid, string type, double x, double y) {
     // node map
     nmap.insert(make_pair(nid, nodes.size()));
     
-    // node
-    if (type == nodeMovie) {
-        boost::shared_ptr<NodeMovie> node(new NodeMovie(nid,x,y));
-        node->sref = node;
-        node->config(conf);
-        node->defaults(dflts);
-        nodes.push_back(node);
-        return node;
-    }
-    else if (type == nodePerson) {
-        boost::shared_ptr<NodePerson> node(new NodePerson(nid,x,y));
-        node->sref = node;
-        node->config(conf);
-        node->defaults(dflts);
-        nodes.push_back(node);
-        return node;
-    }
-    else {
-        boost::shared_ptr<Node> node(new Node(nid,x,y));
-        node->sref = node;
-        node->config(conf);
-        node->defaults(dflts);
-        nodes.push_back(node);
-        return node;
-    }
-    
-
+    boost::shared_ptr<NodeArtist> node(new NodeArtist(nid,x,y));
+    node->sref = node;
+    node->config(conf);
+    node->defaults(dflts);
+    nodes.push_back(node);
+    return node;
 }
 
 /**
@@ -828,62 +760,6 @@ NodePtr Graph::getNode(string nid) {
     // nop
     return NodePtr();
 }
-
-
-/**
- * Creates an edge.
- */
-EdgePtr Graph::createEdge(string eid, string type, NodePtr n1, NodePtr n2) {
-    GLog();
-    
-    // edge map
-    emap.insert(make_pair(eid, edges.size()));
-    
-    // node
-    if (type == edgeMovie) {
-        boost::shared_ptr<Edge> edge(new EdgeMovie(eid,n1,n2));
-        edge->config(conf);
-        edge->defaults(dflts);
-        edges.push_back(edge);
-        return edge;
-    }
-    else if (type == edgePerson) {
-        boost::shared_ptr<Edge> edge(new EdgePerson(eid,n1,n2));
-        edge->config(conf);
-        edge->defaults(dflts);
-        edges.push_back(edge);
-        return edge;
-    }
-    else {
-        boost::shared_ptr<Edge> edge(new Edge(eid,n1,n2));
-        edge->config(conf);
-        edge->defaults(dflts);
-        edges.push_back(edge);
-        return edge;
-    }
-
-}
-
-/**
- * Gets an edge.
- */
-EdgePtr Graph::getEdge(string nid1, string nid2) {
-    GLog();
-    
-    // find the key
-    map<string,int>::iterator it1 = emap.find(nid1 + "_edge_" + nid2);
-    if(it1 != emap.end()) {
-        return EdgePtr(edges.at(it1->second));
-    }
-    map<string,int>::iterator it2 = emap.find(nid2 + "_edge_" + nid1);
-    if(it2 != emap.end()) {
-        return EdgePtr(edges.at(it2->second));
-    }
-    
-    // nop
-    return EdgePtr();
-}
-
 
 /**
  * Creates a connection.
@@ -1020,34 +896,6 @@ bool Graph::onStage(NodePtr n) {
     // borderline
     float b = 300;
     return p.x > -b*sf && p.x < (width+b)*sf && p.y > -b*sf && p.y < (height+b)*sf;
-    
-}
-
-
-/**
- * Sets the tooltip.
- */
-void Graph::tooltip(int tid) {
-    GLog();
-    
-    // selected edges
-    bool etouch = false;
-    vector<string> txts = vector<string>();
-    for (EdgeIt edge = edges.begin(); edge != edges.end(); ++edge) {
-        
-        // touched
-        if ((*edge)->isTouched(touched[tid])) {
-            etouch = true;
-            txts.push_back((*edge)->info(translations));
-        }
-    }
-    
-    // touched
-    if (etouch) {
-        tooltips[tid].renderText(txts);
-        tooltips[tid].offset((touched[tid]->radius+12.0*dpr));
-        tooltips[tid].show();
-    }
     
 }
 

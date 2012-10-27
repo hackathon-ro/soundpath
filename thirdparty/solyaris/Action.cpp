@@ -296,9 +296,6 @@ void Action::assignNode(NodePtr n) {
     action_info = true;
     action_related = true;
     action_close = true;
-    if (n->type != nodeMovie) {
-        action_related = false;
-    }
     
     // bounds
     bounds.x1 = pos_info.x;

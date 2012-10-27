@@ -56,11 +56,7 @@ typedef NodeVectorPtr::iterator NodeIt;
 
 
 // constants
-const string nodeMovie = "movie";
-const string nodePerson = "person";
-const string nodePersonActor = "person_actor";
-const string nodePersonDirector = "person_director";
-const string nodePersonCrew = "person_crew";
+const string nodeArtist = "artist";
 
 // lengths
 const float nodeUnfoldMin = 0.9f;
@@ -205,25 +201,12 @@ class Node {
     gl::Texture	textureLabel;
 
 };
-class NodeMovie: public Node {
+class NodeArtist: public Node {
     
     // public
     public:
     
     // Node
-    NodeMovie();
-    NodeMovie(string idn, double x, double y);
+    NodeArtist();
+    NodeArtist(string idn, double x, double y);
 };
-class NodePerson: public Node {
-    
-    // public
-    public:
-    
-    // Node
-    NodePerson();
-    NodePerson(string idn, double x, double y);
-};
-
-
-
-
