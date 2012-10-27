@@ -119,7 +119,6 @@ class Node {
     void renderNode();
     void updateType(string t);
     void updateMeta(string m);
-    void updateCategory(string c);
     void setAction(string a);
     bool isActive();
     bool isClosed();
@@ -134,7 +133,6 @@ class Node {
     string label;
     string meta;
     string type;
-    string category;
     string action;
     NodeWeakPtr sref;
     NodeWeakPtr parent;
@@ -147,6 +145,7 @@ class Node {
     float mass;
 	Vec2d velocity;
 
+    int numConnections;
     
     // private
     private:
@@ -183,7 +182,6 @@ class Node {
     
     // Textures
     gl::Texture textureNode;
-    gl::Texture textureCore;
     gl::Texture textureGlow;
     
     

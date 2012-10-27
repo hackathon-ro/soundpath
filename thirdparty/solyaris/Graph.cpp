@@ -723,10 +723,7 @@ NodePtr Graph::createNode(string nid, string type) {
     
     // position
     int b = 150*sf;
-    Vec2d np = Vec2d( ((width*sf/2.0)-b + arc4random() % (2*b)), ((height*sf/2.0)-b + arc4random() % (2*b)) );
-    
-    // rezoom
-    np -= translate*(1.0/scale);
+    Vec2d np = Vec2d( b, (height*sf/2.0) );
     
     // create
     return createNode(nid,type,np.x,np.y);

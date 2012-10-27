@@ -102,41 +102,32 @@
 
 -(void) populate {
     
-    
-    
-    
     // source
-    NSString *sid = [self makeNodeId:[NSNumber numberWithInt:0] type:@"movie"];
+    NSString *sid = [self makeNodeId:[NSNumber numberWithInt:0] type:@"artist"];
     NodePtr source = app->getNode([sid UTF8String]);
     if (source == NULL) {
-        source = app->createNode([sid UTF8String],[@"movie" UTF8String]);
-        source->renderLabel([@"test title 1" UTF8String]);
+        source = app->createNode([sid UTF8String],[@"artist" UTF8String]);
+        source->renderLabel([@"title 1" UTF8String]);
     }
-    
-    source->loaded();
     
     // active
     if (! (source->isActive() || source->isLoading())) {
         
         // load
         source->load();
-        
-        // solyaris
-        app->load(source);
     }
     
+    source->numConnections = 5;
     
     for(int i=1; i<5; i++)
     {
         // node
-        NSString *nid = [self makeNodeId:[NSNumber numberWithInt:i] type:@"movie"];
+        NSString *nid = [self makeNodeId:[NSNumber numberWithInt:i] type:@"artist"];
         NodePtr node = app->getNode([nid UTF8String]);
         if (node == NULL) {
-            node = app->createNode([nid UTF8String],[@"movie" UTF8String]);
-            node->renderLabel([@"test title 2" UTF8String]);
+            node = app->createNode([nid UTF8String],[@"artist" UTF8String]);
+            node->renderLabel([[NSString stringWithFormat:@"title%d", i] UTF8String]);
         }
-        
-        node->loaded();
         
         // connection
         ConnectionPtr connection = app->getConnection([sid UTF8String], [nid UTF8String]);
@@ -155,9 +146,6 @@
             
             // load
             node->load();
-            
-            // solyaris
-            app->load(node);
         }
     }
 }
@@ -285,7 +273,7 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     
-    return YES;
+    return UIInterfaceOrientationIsLandscape(interfaceOrientation);
 }
 
 /*

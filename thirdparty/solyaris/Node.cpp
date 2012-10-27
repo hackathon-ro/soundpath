@@ -41,7 +41,6 @@ Node::Node(string idn, double x, double y) {
     label = "";
     meta = "";
     type = "Node";
-    category = "";
     action = "";
     
     
@@ -105,7 +104,6 @@ Node::Node(string idn, double x, double y) {
     
     // textures
     textureNode = gl::Texture(1,1);
-    textureCore = gl::Texture(1,1);
     textureGlow = gl::Texture(1,1);
     
     // font
@@ -298,7 +296,7 @@ void Node::draw() {
         // core
         float ca = selected ? ascore : acore;
         gl::color( ColorA(1.0f, 1.0f, 1.0f, ca) ); // alpha channel
-        gl::draw(textureCore, Rectf(pos.x-core,pos.y-core,pos.x+core,pos.y+core));
+        
         
         // glow
         float ga = selected ? asglow : aglow;
@@ -925,14 +923,10 @@ void Node::renderNode() {
     // movie
     if (type == nodeArtist) {
         
-        // category
-        string cat = (category.length()) > 0 ? ("_" + category) : "";
-        
         // texture
         textureNode = gl::Texture(loadImage(loadResource("node_movie"+sfx)));
         if (active || loading) {
-            textureCore = gl::Texture(loadImage(loadResource("node_movie_core"+cat+sfx)));
-            textureGlow = gl::Texture(loadImage(loadResource("node_movie_glow"+cat+sfx)));
+            textureGlow = gl::Texture(loadImage(loadResource("node_movie_glow"+sfx)));
         }
         
     }
@@ -949,19 +943,6 @@ void Node::updateType(string t) {
     // render
     this->renderNode();
 }
-
-/**
- * Updates the category.
- */
-void Node::updateCategory(string c) {
-    
-    // category
-    category = c;
-    
-    // render
-    this->renderNode();
-}
-
 
 /**
  * Updates the meta.
