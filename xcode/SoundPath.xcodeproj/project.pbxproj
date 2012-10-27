@@ -17,6 +17,11 @@
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
 		43CD9799123D6504003B628E /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 43CD9798123D6504003B628E /* Icon.png */; };
+		67ECF438163C5B5900CA4A49 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67ECF436163C5B5900CA4A49 /* AddressBook.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		67ECF439163C5B5900CA4A49 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67ECF437163C5B5900CA4A49 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		67ECF43B163C5B9C00CA4A49 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67ECF43A163C5B9C00CA4A49 /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		67ECF43D163C5BE000CA4A49 /* FacebookSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 67ECF43C163C5BE000CA4A49 /* FacebookSDKResources.bundle */; };
+		67ECF43E163C5CBD00CA4A49 /* libfacebook_ios_sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 67ECF430163C5B3700CA4A49 /* libfacebook_ios_sdk.a */; };
 		B30CB1EC163C494300A25046 /* Action.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B30CB1D9163C494300A25046 /* Action.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		B30CB1ED163C494300A25046 /* Configuration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B30CB1DB163C494300A25046 /* Configuration.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		B30CB1EE163C494300A25046 /* Connection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B30CB1DD163C494300A25046 /* Connection.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -96,6 +101,30 @@
 		C727C02E121B400300192073 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C727C02D121B400300192073 /* CoreVideo.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		67ECF42F163C5B3700CA4A49 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 67ECF427163C5B3700CA4A49 /* facebook-ios-sdk.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D2AAC07E0554694100DB518D;
+			remoteInfo = "facebook-ios-sdk";
+		};
+		67ECF431163C5B3700CA4A49 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 67ECF427163C5B3700CA4A49 /* facebook-ios-sdk.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B9CBC519152537270036AA71;
+			remoteInfo = FacebookSDKTests;
+		};
+		67ECF434163C5B4B00CA4A49 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 67ECF427163C5B3700CA4A49 /* facebook-ios-sdk.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC07D0554694100DB518D;
+			remoteInfo = "facebook-ios-sdk";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		00CFDF6A1138442D0091E310 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		00CFDFDF11384CC60091E310 /* SoundPathApp.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SoundPathApp.mm; sourceTree = "<group>"; };
@@ -109,6 +138,11 @@
 		28FD15070DC6FC5B0079059D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		32CA4F630368D1EE00C91783 /* SoundPath_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundPath_Prefix.pch; sourceTree = "<group>"; };
 		43CD9798123D6504003B628E /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = SOURCE_ROOT; };
+		67ECF427163C5B3700CA4A49 /* facebook-ios-sdk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "facebook-ios-sdk.xcodeproj"; path = "../Submodules/FacebookSDK/src/facebook-ios-sdk.xcodeproj"; sourceTree = "<group>"; };
+		67ECF436163C5B5900CA4A49 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		67ECF437163C5B5900CA4A49 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		67ECF43A163C5B9C00CA4A49 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		67ECF43C163C5BE000CA4A49 /* FacebookSDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = FacebookSDKResources.bundle; path = ../Submodules/FacebookSDK/src/FacebookSDKResources.bundle; sourceTree = "<group>"; };
 		B30CB1D9163C494300A25046 /* Action.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Action.cpp; sourceTree = "<group>"; };
 		B30CB1DA163C494300A25046 /* Action.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Action.h; sourceTree = "<group>"; };
 		B30CB1DB163C494300A25046 /* Configuration.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Configuration.cpp; sourceTree = "<group>"; };
@@ -209,6 +243,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67ECF43E163C5CBD00CA4A49 /* libfacebook_ios_sdk.a in Frameworks */,
+				67ECF43B163C5B9C00CA4A49 /* Social.framework in Frameworks */,
+				67ECF438163C5B5900CA4A49 /* AddressBook.framework in Frameworks */,
+				67ECF439163C5B5900CA4A49 /* AdSupport.framework in Frameworks */,
 				00EB544113E25367006BF8E7 /* libz.dylib in Frameworks */,
 				00EB543F13E25352006BF8E7 /* CoreText.framework in Frameworks */,
 				00EB53F013E250DA006BF8E7 /* AudioToolbox.framework in Frameworks */,
@@ -257,6 +295,9 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				67ECF43A163C5B9C00CA4A49 /* Social.framework */,
+				67ECF436163C5B5900CA4A49 /* AddressBook.framework */,
+				67ECF437163C5B5900CA4A49 /* AdSupport.framework */,
 				00CFDFB81138492F0091E310 /* Headers */,
 				00CFDFA7113848F40091E310 /* Source */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -281,6 +322,8 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				67ECF43C163C5BE000CA4A49 /* FacebookSDKResources.bundle */,
+				67ECF427163C5B3700CA4A49 /* facebook-ios-sdk.xcodeproj */,
 				00EB543E13E25352006BF8E7 /* CoreText.framework */,
 				00EB544013E25367006BF8E7 /* libz.dylib */,
 				C727C02B121B400300192073 /* CoreMedia.framework */,
@@ -294,6 +337,15 @@
 				00EB53EF13E250DA006BF8E7 /* AudioToolbox.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		67ECF428163C5B3700CA4A49 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				67ECF430163C5B3700CA4A49 /* libfacebook_ios_sdk.a */,
+				67ECF432163C5B3700CA4A49 /* FacebookSDKTests.octest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		B30CB1D8163C494300A25046 /* solyaris */ = {
@@ -451,6 +503,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				67ECF435163C5B4B00CA4A49 /* PBXTargetDependency */,
 			);
 			name = SoundPath;
 			productName = SoundPath;
@@ -471,12 +524,35 @@
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 67ECF428163C5B3700CA4A49 /* Products */;
+					ProjectRef = 67ECF427163C5B3700CA4A49 /* facebook-ios-sdk.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				1D6058900D05DD3D006BFB54 /* SoundPath */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		67ECF430163C5B3700CA4A49 /* libfacebook_ios_sdk.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libfacebook_ios_sdk.a;
+			remoteRef = 67ECF42F163C5B3700CA4A49 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		67ECF432163C5B3700CA4A49 /* FacebookSDKTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = FacebookSDKTests.octest;
+			remoteRef = 67ECF431163C5B3700CA4A49 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		1D60588D0D05DD3D006BFB54 /* Resources */ = {
@@ -546,6 +622,7 @@
 				B30CB26B163C499700A25046 /* node_person_glow.png in Resources */,
 				B30CB26C163C499700A25046 /* node_person_glow@2x.png in Resources */,
 				B30CB26D163C499700A25046 /* sample_click.wav in Resources */,
+				67ECF43D163C5BE000CA4A49 /* FacebookSDKResources.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -574,6 +651,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		67ECF435163C5B4B00CA4A49 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "facebook-ios-sdk";
+			targetProxy = 67ECF434163C5B4B00CA4A49 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
 		1D6058940D05DD3E006BFB54 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -591,7 +676,7 @@
 				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
 				HEADER_SEARCH_PATHS = ../thirdparty/include;
 				INFOPLIST_FILE = "SoundPath-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../../_thirdparty/Solyaris/Source/GANTracker\"",
@@ -617,7 +702,7 @@
 				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
 				HEADER_SEARCH_PATHS = ../thirdparty/include;
 				INFOPLIST_FILE = "SoundPath-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../../_thirdparty/Solyaris/Source/GANTracker\"",
