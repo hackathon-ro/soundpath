@@ -7,13 +7,22 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Facebook.h"
 
 #include "cinder/app/AppCocoaTouch.h"
 #include "cinder/app/CinderAppDelegateIPhone.h"
 
-@interface SoundPathAppDelegate : CinderAppDelegateIPhone
+@class LoginViewController;
+
+@interface SoundPathAppDelegate : CinderAppDelegateIPhone<FBRequestDelegate,FBSessionDelegate> {
+    Facebook *facebook;
+    NSArray *userPermissions;
+}
 
 @property (nonatomic, strong) UINavigationController * navigationController;
 @property (nonatomic, strong) UIViewController * mainViewController;
+@property (strong, nonatomic) Facebook * facebook;
+@property (strong, nonatomic) LoginViewController * login;
+@property (nonatomic, strong) NSArray *userPermissions;
 
 @end

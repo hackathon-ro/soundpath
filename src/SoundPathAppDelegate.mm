@@ -9,11 +9,18 @@
 #import "SoundPathAppDelegate.h"
 #import "MainViewController.h"
 #import "SPUtils.h"
+#import "LoginViewController.h"
+
+static NSString* kFacebookAppId = @"465005836872056";
 
 @implementation SoundPathAppDelegate
 
 @synthesize navigationController;
 @synthesize mainViewController;
+
+@synthesize facebook;
+@synthesize userPermissions;
+@synthesize login;
 
 #pragma mark -
 #pragma mark Application lifecycle
@@ -38,6 +45,42 @@
     [navigationController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
     
     [window addSubview:navigationController.view];
+    
+    if(!login)
+        self.login = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
+    
+    facebook = [[Facebook alloc] initWithAppId:kFacebookAppId andDelegate:self];
+    
+    // Check and retrieve authorization information
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if ([defaults objectForKey:@"FBAccessTokenKey"] && [defaults objectForKey:@"FBExpirationDateKey"]) {
+        facebook.accessToken = [defaults objectForKey:@"FBAccessTokenKey"];
+        facebook.expirationDate = [defaults objectForKey:@"FBExpirationDateKey"];
+    }
+    
+    userPermissions = [[NSArray alloc] initWithObjects: @"user_likes",@"friends_likes", nil];
+    
+    if (![facebook isSessionValid]) {
+        
+//        self.navigationController.modalPresentationStyle = UIModalPresentationFormSheet;
+        [self.navigationController presentModalViewController:login animated:NO];
+//        login.view.superview.autoresizingMask =
+//        UIViewAutoresizingFlexibleTopMargin |
+//        UIViewAutoresizingFlexibleBottomMargin;
+//        login.view.frame = CGRectMake(
+//                                                         login.view.superview.frame.origin.x,
+//                                                         login.view.superview.frame.origin.y,
+//                                                         300.0f,
+//                                                         200.0f
+//                                                         );
+//        login.view.center = window.center;
+    } else{
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSLog(@"token:%@",[defaults objectForKey:@"FBAccessTokenKey"]);
+        [self apiFQLIMe];
+    }
+    
+    
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
@@ -53,6 +96,7 @@
     
     // cinder
     [super applicationDidBecomeActive:application];
+    [[self facebook] extendAccessTokenIfNeeded];
     
 }
 
@@ -76,5 +120,151 @@
     // cinder
     [super applicationWillTerminate:application];
 }
+
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
+    
+    return [self.facebook handleOpenURL:url];
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    
+    return [self.facebook handleOpenURL:url];
+}
+
+- (void)fbDidLogin {
+    
+    DLog();
+    
+    [self apiFQLIMe];
+    [self storeAuthData:[facebook accessToken] expiresAt:[facebook expirationDate]];
+}
+
+-(void)fbDidNotLogin:(BOOL)cancelled {
+    NSLog(@"did not login");
+}
+
+-(void)fbDidLogout
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults removeObjectForKey:@"FBAccessTokenKey"];
+    [defaults removeObjectForKey:@"FBExpirationDateKey"];
+    [defaults synchronize];
+}
+
+-(void)fbDidExtendToken:(NSString *)accessToken expiresAt:(NSDate *)expiresAt
+{   NSLog(@"token extended");
+    [self storeAuthData:accessToken expiresAt:expiresAt];
+}
+
+- (void)fbSessionInvalidated
+{
+    [self fbDidLogout];
+}
+
+
+#pragma mark - FBRequestDelegate Methods
+/**
+ * Called when the Facebook API request has returned a response.
+ *
+ * This callback gives you access to the raw response. It's called before
+ * (void)request:(FBRequest *)request didLoad:(id)result,
+ * which is passed the parsed response object.
+ */
+- (void)request:(FBRequest *)request didReceiveResponse:(NSURLResponse *)response {
+    NSLog(@"received response");
+}
+
+/**
+ * Called when a request returns and its response has been parsed into
+ * an object.
+ *
+ * The resulting object may be a dictionary, an array or a string, depending
+ * on the format of the API response. If you need access to the raw response,
+ * use:
+ *
+ * (void)request:(FBRequest *)request
+ *      didReceiveResponse:(NSURLResponse *)response
+ */
+- (void)request:(FBRequest *)request didLoad:(id)result {
+    if ([result isKindOfClass:[NSArray class]]) {
+        result = [result objectAtIndex:0];
+    }
+    // This callback can be a result of getting the user's basic
+    // information or getting the user's permissions.
+    if ([result objectForKey:@"name"]) {
+        // If basic information callback, set the UI objects to
+        // display this.
+        NSLog(@"name:%@\nuid:%@",[result objectForKey:@"name"],[result objectForKey:@"uid"]);
+        // Get the profile image
+//        UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[result objectForKey:@"pic"]]]];
+        NSLog(@"iamge:%@",[result objectForKey:@"pic"]);
+        // Resize, crop the image to make sure it is square and renders
+        // well on Retina display
+        //        float ratio;
+        //        float delta;
+        //        float px = 100; // Double the pixels of the UIImageView (to render on Retina)
+        //        CGPoint offset;
+        //        CGSize size = image.size;
+        //        if (size.width > size.height) {
+        //            ratio = px / size.width;
+        //            delta = (ratio*size.width - ratio*size.height);
+        //            offset = CGPointMake(delta/2, 0);
+        //        } else {
+        //            ratio = px / size.height;
+        //            delta = (ratio*size.height - ratio*size.width);
+        //            offset = CGPointMake(0, delta/2);
+        //        }
+        //        CGRect clipRect = CGRectMake(-offset.x, -offset.y,
+        //                                     (ratio * size.width) + delta,
+        //                                     (ratio * size.height) + delta);
+        //        UIGraphicsBeginImageContext(CGSizeMake(px, px));
+        //        UIRectClip(clipRect);
+        //        [image drawInRect:clipRect];
+        //        UIImage *imgThumb = UIGraphicsGetImageFromCurrentImageContext();
+        //        UIGraphicsEndImageContext();
+        //        [profilePhotoImageView setImage:imgThumb];
+        
+        [self apiGraphUserPermissions];
+    } else {
+        // Processing permissions information
+        //        HackbookAppDelegate *delegate = (HackbookAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [self setUserPermissions:[[result objectForKey:@"data"] objectAtIndex:0]];
+    }
+}
+
+/**
+ * Called when an error prevents the Facebook API request from completing
+ * successfully.
+ */
+- (void)request:(FBRequest *)request didFailWithError:(NSError *)error {
+    NSLog(@"Err message: %@", [[error userInfo] objectForKey:@"error_msg"]);
+    NSLog(@"Err code: %d", [error code]);
+}
+
+- (void)apiGraphUserPermissions {
+
+    [[self facebook] requestWithGraphPath:@"me/permissions" andDelegate:self];
+}
+
+- (void)apiFQLIMe {
+
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                   @"SELECT uid, name, pic FROM user WHERE uid=me()", @"query",
+                                   nil];
+    
+    [[self facebook] requestWithMethodName:@"fql.query"
+                                        andParams:params
+                                    andHttpMethod:@"POST"
+                                      andDelegate:self];
+}
+
+
+- (void)storeAuthData:(NSString *)accessToken expiresAt:(NSDate *)expiresAt {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:accessToken forKey:@"FBAccessTokenKey"];
+    [defaults setObject:expiresAt forKey:@"FBExpirationDateKey"];
+    [defaults synchronize];
+}
+
 
 @end

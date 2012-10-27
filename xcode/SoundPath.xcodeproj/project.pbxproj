@@ -17,11 +17,14 @@
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
 		43CD9799123D6504003B628E /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 43CD9798123D6504003B628E /* Icon.png */; };
+		670BC21E163C6C46001297F8 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 670BC21D163C6C46001297F8 /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		67ECF438163C5B5900CA4A49 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67ECF436163C5B5900CA4A49 /* AddressBook.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		67ECF439163C5B5900CA4A49 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67ECF437163C5B5900CA4A49 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		67ECF43B163C5B9C00CA4A49 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67ECF43A163C5B9C00CA4A49 /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		67ECF43D163C5BE000CA4A49 /* FacebookSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 67ECF43C163C5BE000CA4A49 /* FacebookSDKResources.bundle */; };
 		67ECF43E163C5CBD00CA4A49 /* libfacebook_ios_sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 67ECF430163C5B3700CA4A49 /* libfacebook_ios_sdk.a */; };
+		67ECF442163C606D00CA4A49 /* LoginViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 67ECF440163C606D00CA4A49 /* LoginViewController.mm */; };
+		67ECF443163C606D00CA4A49 /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 67ECF441163C606D00CA4A49 /* LoginViewController.xib */; };
 		B30CB1EC163C494300A25046 /* Action.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B30CB1D9163C494300A25046 /* Action.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		B30CB1ED163C494300A25046 /* Configuration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B30CB1DB163C494300A25046 /* Configuration.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		B30CB1EE163C494300A25046 /* Connection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B30CB1DD163C494300A25046 /* Connection.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -93,7 +96,7 @@
 		B30CB26D163C499700A25046 /* sample_click.wav in Resources */ = {isa = PBXBuildFile; fileRef = B30CB231163C499700A25046 /* sample_click.wav */; };
 		B34C2A44163AF517007AB2B4 /* SoundPathAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = B34C2A41163AF517007AB2B4 /* SoundPathAppDelegate.mm */; };
 		B34C2A45163AF517007AB2B4 /* MainViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B34C2A43163AF517007AB2B4 /* MainViewController.mm */; };
-		B398D30E163AD2F6003724DB /* SPUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = B398D30D163AD2F6003724DB /* SPUtils.m */; };
+		B398D30E163AD2F6003724DB /* SPUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = B398D30D163AD2F6003724DB /* SPUtils.mm */; };
 		B39F3784163BFDF2008E419D /* MainViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = B39F3782163BFDF2008E419D /* MainViewController-iPad.xib */; };
 		B39F3785163BFDF2008E419D /* MainViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = B39F3783163BFDF2008E419D /* MainViewController-iPhone.xib */; };
 		C725DFFE121DAC7F00FA186B /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C727C02B121B400300192073 /* CoreMedia.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -138,11 +141,15 @@
 		28FD15070DC6FC5B0079059D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		32CA4F630368D1EE00C91783 /* SoundPath_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundPath_Prefix.pch; sourceTree = "<group>"; };
 		43CD9798123D6504003B628E /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = SOURCE_ROOT; };
+		670BC21D163C6C46001297F8 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		67ECF427163C5B3700CA4A49 /* facebook-ios-sdk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "facebook-ios-sdk.xcodeproj"; path = "../Submodules/FacebookSDK/src/facebook-ios-sdk.xcodeproj"; sourceTree = "<group>"; };
 		67ECF436163C5B5900CA4A49 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		67ECF437163C5B5900CA4A49 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		67ECF43A163C5B9C00CA4A49 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		67ECF43C163C5BE000CA4A49 /* FacebookSDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = FacebookSDKResources.bundle; path = ../Submodules/FacebookSDK/src/FacebookSDKResources.bundle; sourceTree = "<group>"; };
+		67ECF43F163C606D00CA4A49 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		67ECF440163C606D00CA4A49 /* LoginViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LoginViewController.mm; sourceTree = "<group>"; };
+		67ECF441163C606D00CA4A49 /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
 		B30CB1D9163C494300A25046 /* Action.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Action.cpp; sourceTree = "<group>"; };
 		B30CB1DA163C494300A25046 /* Action.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Action.h; sourceTree = "<group>"; };
 		B30CB1DB163C494300A25046 /* Configuration.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Configuration.cpp; sourceTree = "<group>"; };
@@ -227,7 +234,7 @@
 		B34C2A42163AF517007AB2B4 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		B34C2A43163AF517007AB2B4 /* MainViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MainViewController.mm; sourceTree = "<group>"; };
 		B398D30C163AD2F6003724DB /* SPUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPUtils.h; sourceTree = "<group>"; };
-		B398D30D163AD2F6003724DB /* SPUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPUtils.m; sourceTree = "<group>"; };
+		B398D30D163AD2F6003724DB /* SPUtils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SPUtils.mm; sourceTree = "<group>"; };
 		B398D310163AD371003724DB /* SoundPathApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundPathApp.h; sourceTree = "<group>"; };
 		B39F3410163BEBE5008E419D /* SoundPath-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SoundPath-Info.plist"; sourceTree = "<group>"; };
 		B39F377D163BF8FC008E419D /* SPInteropDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPInteropDelegate.h; sourceTree = "<group>"; };
@@ -243,6 +250,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				670BC21E163C6C46001297F8 /* Accounts.framework in Frameworks */,
 				67ECF43E163C5CBD00CA4A49 /* libfacebook_ios_sdk.a in Frameworks */,
 				67ECF43B163C5B9C00CA4A49 /* Social.framework in Frameworks */,
 				67ECF438163C5B5900CA4A49 /* AddressBook.framework in Frameworks */,
@@ -295,6 +303,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				670BC21D163C6C46001297F8 /* Accounts.framework */,
 				67ECF43A163C5B9C00CA4A49 /* Social.framework */,
 				67ECF436163C5B5900CA4A49 /* AddressBook.framework */,
 				67ECF437163C5B5900CA4A49 /* AdSupport.framework */,
@@ -464,6 +473,9 @@
 				B34C2A43163AF517007AB2B4 /* MainViewController.mm */,
 				B39F3783163BFDF2008E419D /* MainViewController-iPhone.xib */,
 				B39F3782163BFDF2008E419D /* MainViewController-iPad.xib */,
+				67ECF43F163C606D00CA4A49 /* LoginViewController.h */,
+				67ECF440163C606D00CA4A49 /* LoginViewController.mm */,
+				67ECF441163C606D00CA4A49 /* LoginViewController.xib */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -479,7 +491,7 @@
 			isa = PBXGroup;
 			children = (
 				B398D30C163AD2F6003724DB /* SPUtils.h */,
-				B398D30D163AD2F6003724DB /* SPUtils.m */,
+				B398D30D163AD2F6003724DB /* SPUtils.mm */,
 				B39F377D163BF8FC008E419D /* SPInteropDelegate.h */,
 				B398D310163AD371003724DB /* SoundPathApp.h */,
 				00CFDFDF11384CC60091E310 /* SoundPathApp.mm */,
@@ -623,6 +635,7 @@
 				B30CB26C163C499700A25046 /* node_person_glow@2x.png in Resources */,
 				B30CB26D163C499700A25046 /* sample_click.wav in Resources */,
 				67ECF43D163C5BE000CA4A49 /* FacebookSDKResources.bundle in Resources */,
+				67ECF443163C606D00CA4A49 /* LoginViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -634,7 +647,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				00CFDFE011384CC60091E310 /* SoundPathApp.mm in Sources */,
-				B398D30E163AD2F6003724DB /* SPUtils.m in Sources */,
+				B398D30E163AD2F6003724DB /* SPUtils.mm in Sources */,
 				B34C2A44163AF517007AB2B4 /* SoundPathAppDelegate.mm in Sources */,
 				B34C2A45163AF517007AB2B4 /* MainViewController.mm in Sources */,
 				B30CB1EC163C494300A25046 /* Action.cpp in Sources */,
@@ -646,6 +659,7 @@
 				B30CB1F2163C494300A25046 /* I18N.cpp in Sources */,
 				B30CB1F3163C494300A25046 /* Node.cpp in Sources */,
 				B30CB1F4163C494300A25046 /* Tooltip.cpp in Sources */,
+				67ECF442163C606D00CA4A49 /* LoginViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -677,14 +691,19 @@
 				HEADER_SEARCH_PATHS = ../thirdparty/include;
 				INFOPLIST_FILE = "SoundPath-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../../_thirdparty/Solyaris/Source/GANTracker\"",
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "";
+				"OTHER_LDFLAGS[sdk=iphoneos*][arch=*]" = (
+					"../thirdparty/lib/cinder/libcinder-iphone_d.a",
+					"-lsqlite3.0",
 				);
-				"OTHER_LDFLAGS[sdk=iphoneos*][arch=*]" = "../thirdparty/lib/cinder/libcinder-iphone_d.a";
-				"OTHER_LDFLAGS[sdk=iphonesimulator*][arch=*]" = "../thirdparty/lib/cinder/libcinder-iphone-sim_d.a";
+				"OTHER_LDFLAGS[sdk=iphonesimulator*][arch=*]" = (
+					"../thirdparty/lib/cinder/libcinder-iphone-sim_d.a",
+					"-lsqlite3.0",
+				);
 				PRODUCT_NAME = SoundPath;
-				USER_HEADER_SEARCH_PATHS = "../../thirdparty/**";
+				USER_HEADER_SEARCH_PATHS = "../Submodules/**";
 			};
 			name = Debug;
 		};
@@ -703,14 +722,19 @@
 				HEADER_SEARCH_PATHS = ../thirdparty/include;
 				INFOPLIST_FILE = "SoundPath-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../../_thirdparty/Solyaris/Source/GANTracker\"",
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "";
+				"OTHER_LDFLAGS[sdk=iphoneos*][arch=*]" = (
+					"../thirdparty/lib/cinder/libcinder-iphone.a",
+					"-lsqlite3.0",
 				);
-				"OTHER_LDFLAGS[sdk=iphoneos*][arch=*]" = "../thirdparty/lib/cinder/libcinder-iphone.a";
-				"OTHER_LDFLAGS[sdk=iphonesimulator*][arch=*]" = "../thirdparty/lib/cinder/libcinder-iphone-sim.a";
+				"OTHER_LDFLAGS[sdk=iphonesimulator*][arch=*]" = (
+					"../thirdparty/lib/cinder/libcinder-iphone-sim.a",
+					"-lsqlite3.0",
+				);
 				PRODUCT_NAME = SoundPath;
-				USER_HEADER_SEARCH_PATHS = "../../thirdparty/**";
+				USER_HEADER_SEARCH_PATHS = "../Submodules/**";
 			};
 			name = Release;
 		};
