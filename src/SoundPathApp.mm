@@ -47,6 +47,9 @@ void SoundPathApp::setup() {
     // sketch
     bg = Color(30.0/255.0, 30.0/255.0, 30.0/255.0);
     
+    // graph
+    graph = Graph(dwidth,dheight,UIDeviceOrientationPortrait);
+    
     // vars
     pscale = 1.0;
     ppinch = CGPointMake(0,0);
@@ -54,6 +57,21 @@ void SoundPathApp::setup() {
     // app
     this->applyDeviceOrientation(UIDeviceOrientationPortrait);
     this->applySettings();
+    
+    // configuration
+    Configuration conf = Configuration();
+    conf.setConfiguration(cDeviceRedux,redux ? "1" : "0");
+    conf.setConfiguration(cDisplayRetina,retina ? "1" : "0");
+    graph.config(conf);
+    
+    
+    // translations
+    I18N tls = I18N();
+    tls.setTranslation(i18nTooltipActor1, [NSLocalizedString(@"graph_tooltip_actor_1", @" is ") UTF8String]);
+    tls.setTranslation(i18nTooltipActor2, [NSLocalizedString(@"graph_tooltip_actor_2", @" in ") UTF8String]);
+    tls.setTranslation(i18nTooltipCrew1, [NSLocalizedString(@"graph_tooltip_crew_1", @" is the ") UTF8String]);
+    tls.setTranslation(i18nTooltipCrew2, [NSLocalizedString(@"graph_tooltip_crew_2", @" of ") UTF8String]);
+    graph.i18n(tls);
 }
 
 
@@ -79,9 +97,11 @@ void SoundPathApp::applyDeviceOrientation(int dorientation) {
     // orientation
     if (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight) {
         this->setWindowSize(dheight, dwidth);
+        graph.resize(dheight,dwidth,orientation);
     }
     else {
         this->setWindowSize(dwidth, dheight);
+        graph.resize(dwidth,dheight,orientation);
     }
 }
 
@@ -90,6 +110,31 @@ void SoundPathApp::applyDeviceOrientation(int dorientation) {
  */
 void SoundPathApp::applySettings() {
     GLog();
+    
+    // user defaults
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	
+	// defaults
+    Defaults defaults = Defaults();
+    
+    // user defaults
+	NSArray *keys = [[userDefaults dictionaryRepresentation] allKeys];
+    for (NSString *key in keys) {
+        NSObject *def = [userDefaults objectForKey:key];
+        
+        // string
+        if ([def isKindOfClass:[NSString class]]) {
+            
+            // match
+            NSRange range = [key rangeOfString : @"graph_"];
+            if (range.location != NSNotFound) {
+                defaults.setDefault([key UTF8String], [(NSString*)def UTF8String]);
+            }
+        }
+    }
+    
+    // apply to graph
+    graph.defaults(defaults);
 }
 
 #pragma mark -
@@ -99,6 +144,8 @@ void SoundPathApp::applySettings() {
  * Cinder update.
  */
 void SoundPathApp::update() {
+    // graph
+    graph.update();
 }
 
 /*
@@ -113,6 +160,9 @@ void SoundPathApp::draw() {
     
     // clear
 	gl::clear(bg);
+    
+    // graph
+    graph.draw();
 }
 
 /*
@@ -122,6 +172,9 @@ void SoundPathApp::reset() {
     
     // app
     pscale = 1.0;
+    
+    // graph
+    graph.reset();
 }
 
 
@@ -143,11 +196,67 @@ void SoundPathApp::touchesBegan( TouchEvent event ) {
         // touch
         if (taps == 1) {
             
+            // touch graph
+            NodePtr node = graph.touchBegan(touch->getPos(),touch->getId());
+            if (node != NULL) {
+                
+                // touch controller
+                NSString *nid = [NSString stringWithCString:node->nid.c_str() encoding:[NSString defaultCStringEncoding]];
+                
+                // info
+                if (node->action == actionInfo) {
+                    FLog("action info");
+                    
+                    // info
+                    [interopDelegate nodeInfo:nid];
+                }
+                // related
+                else if (node->action == actionRelated) {
+                    FLog("action related");
+                    
+                    // related
+                    [interopDelegate nodeRelated:nid];
+                }
+                // close
+                else if (node->action == actionClose) {
+                    FLog("action close");
+                    
+                    // related
+                    [interopDelegate nodeClose:nid];
+                }
+                
+                // reset
+                node->setAction("");
+                
+            }
         }
         
         // double tap
         if (taps == 2) {
             
+            // tap graph
+            NodePtr node = graph.doubleTap(touch->getPos(),touch->getId());
+            if (node != NULL) {
+                
+                // tap controller
+                NSString *nid = [NSString stringWithCString:node->nid.c_str() encoding:[NSString defaultCStringEncoding]];
+                
+                // load
+                if (! node->isActive() && ! node->isLoading()) {
+                    
+                    // node load
+                    [interopDelegate nodeLoad:nid];
+                }
+                // open
+                if (node->isClosed()) {
+                    node->open();
+                }
+                // information
+                else {
+                    // node info
+                    [interopDelegate nodeInformation:nid];
+                }
+            }
         }
         
     }
@@ -158,6 +267,9 @@ void SoundPathApp::touchesMoved( TouchEvent event ){
     // touch
     for( vector<TouchEvent::Touch>::const_iterator touch = event.getTouches().begin(); touch != event.getTouches().end(); ++touch ) {
         
+        // graph
+        graph.touchMoved(touch->getPos(),touch->getPrevPos(),touch->getId());
+        
     }
 }
 void SoundPathApp::touchesEnded( TouchEvent event ){
@@ -165,6 +277,9 @@ void SoundPathApp::touchesEnded( TouchEvent event ){
     
     // touch
     for( vector<TouchEvent::Touch>::const_iterator touch = event.getTouches().begin(); touch != event.getTouches().end(); ++touch ) {
+        
+        // graph
+        graph.touchEnded(touch->getPos(),touch->getId());
     }
 }
 
@@ -195,10 +310,120 @@ void SoundPathApp::pinched(UIPinchGestureRecognizer* recognizer) {
         CGPoint pinch = [recognizer locationInView:recognizer.view];
         double scale = recognizer.scale;
         
+        // graph
+        graph.pinched(Vec2d(pinch.x,pinch.y), Vec2d(ppinch.x,ppinch.y), scale, pscale);
+        
         // value
         pscale = scale;
         ppinch = pinch;
     }
+}
+
+#pragma mark -
+#pragma mark Business
+
+
+/*
+ * Creates a node.
+ */
+NodePtr SoundPathApp::createNode(string nid, string type) {
+    GLog();
+    
+    // graph
+    return graph.createNode(nid,type);
+}
+NodePtr SoundPathApp::createNode(string nid, string type, double x, double y) {
+    GLog();
+    
+    // graph
+    return graph.createNode(nid,type,x,y);
+}
+
+/*
+ * Gets a node.
+ */
+NodePtr SoundPathApp::getNode(string nid) {
+    GLog();
+    
+    // graph
+    return graph.getNode(nid);
+}
+
+/*
+ * Creates an edge.
+ */
+EdgePtr SoundPathApp::createEdge(string eid, string type, NodePtr n1, NodePtr n2) {
+    GLog();
+    
+    // graph
+    return graph.createEdge(eid,type,n1,n2);
+}
+
+/*
+ * Gets an edge.
+ */
+EdgePtr SoundPathApp::getEdge(string nid1, string nid2) {
+    GLog();
+    
+    // graph
+    return graph.getEdge(nid1,nid2);
+}
+
+/*
+ * Creates a connection.
+ */
+ConnectionPtr SoundPathApp::createConnection(string cid, string type, NodePtr n1, NodePtr n2) {
+    GLog();
+    
+    // graph
+    return graph.createConnection(cid,type,n1,n2);
+}
+
+/*
+ * Gets a connection.
+ */
+ConnectionPtr SoundPathApp::getConnection(string nid1, string nid2) {
+    GLog();
+    
+    // graph
+    return graph.getConnection(nid1,nid2);
+}
+
+void SoundPathApp::load(NodePtr n) {
+    GLog();
+    
+    // graph
+    graph.load(n);
+}
+
+/**
+ * Unloads a node.
+ */
+void SoundPathApp::unload(NodePtr n) {
+    GLog();
+    
+    // graph
+    graph.unload(n);
+}
+
+/**
+ * Shifts the graph.
+ */
+void SoundPathApp::graphShift(double mx, double my) {
+    GLog();
+    
+    // graph
+    graph.shift(Vec2d(mx,my));
+}
+
+/**
+ * Calculates a node's real world coordinates.
+ */
+Vec3d SoundPathApp::nodeCoordinates(NodePtr n) {
+    GLog();
+    
+    // calculate real world position
+    return graph.coordinates(n->pos.x, n->pos.y, n->radius);
 }
 
 CINDER_APP_COCOA_TOUCH( SoundPathApp, RendererGl )

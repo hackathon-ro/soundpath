@@ -89,11 +89,207 @@
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [self populate];
 }
 
 - (void) viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
+}
+
+#pragma mark - testing
+
+-(void) populate {
+    
+    // source
+    NSString *sid = [self makeNodeId:[NSNumber numberWithInt:0] type:@"movie"];
+    NodePtr source = app->getNode([sid UTF8String]);
+    if (source == NULL) {
+        source = app->createNode([sid UTF8String],[@"movie" UTF8String]);
+        source->renderLabel([@"test title 1" UTF8String]);
+        
+        
+        // child
+        NSString *cid = [self makeNodeId:[NSNumber numberWithInt:0] type:@"person"];
+        NodePtr child = app->getNode([cid UTF8String]);
+        bool existing = true;
+        if (child == NULL) {
+            existing = false;
+
+            child = app->createNode([cid UTF8String],[@"person" UTF8String], source->pos.x, source->pos.y);
+            child->renderLabel([@"pers title 1" UTF8String]);
+            child->updateType([@"person_actor" UTF8String]);
+        }
+
+        source->addChild(child);
+        
+        // create edge
+        EdgePtr edge = app->getEdge([sid UTF8String], [cid UTF8String]);
+        if (edge == NULL) {
+            
+            // this is the edge
+            NSString *eid = [self makeEdgeId:sid to:cid];
+            edge = app->createEdge([eid UTF8String],[@"person" UTF8String],source,child);
+            
+            // type
+            edge->updateType([@"person_Actor" UTF8String]);
+            
+            // render
+            edge->renderLabel([@"test edge" UTF8String]);
+        }
+        if (existing) {
+            edge->show();
+        }
+        
+    }
+    
+    source->loaded();
+    
+    // node
+    NSString *nid = [self makeNodeId:[NSNumber numberWithInt:1] type:@"movie"];
+    NodePtr node = app->getNode([nid UTF8String]);
+    if (node == NULL) {
+        node = app->createNode([nid UTF8String],[@"movie" UTF8String]);
+        node->renderLabel([@"test title 2" UTF8String]);
+    }
+    
+    node->loaded();
+    
+    // connection
+    ConnectionPtr connection = app->getConnection([sid UTF8String], [nid UTF8String]);
+    if (connection == NULL) {
+        
+        // create
+        NSString *cid = [self makeConnectionId:sid to:nid];
+        connection = app->createConnection([cid UTF8String],[@"related" UTF8String],source,node);
+        
+        // connect it
+        source->connect(node);
+    }
+    
+    
+    // active
+    if (! (source->isActive() || source->isLoading())) {
+        
+        // load
+        source->load();
+        
+        // solyaris
+        app->load(source);
+    }
+    
+    // active
+    if (! (node->isActive() || node->isLoading())) {
+        
+        // load
+        node->load();
+        
+        // solyaris
+        app->load(node);
+    }
+}
+
+#pragma mark - SoundPathInteractionDelegate
+- (void)nodeInfo:(NSString*)nid
+{
+    DLog();
+    
+    // node
+    NodePtr node = app->getNode([nid UTF8String]);
+    
+    // info
+    if (node->isActive()) {
+        
+        // parent
+        NSString *pid = [NSString stringWithCString:node->nid.c_str() encoding:[NSString defaultCStringEncoding]];
+        
+        
+        // children
+        for (NodeIt child = node->children.begin(); child != node->children.end(); ++child) {
+            
+            // child id
+            NSString *cid = [NSString stringWithCString:(*child)->nid.c_str() encoding:[NSString defaultCStringEncoding]];
+            
+            // edge
+            EdgePtr nedge = app->getEdge([pid UTF8String], [cid UTF8String]);
+        }
+    }
+}
+
+- (void)nodeRelated:(NSString*)nid
+{
+    DLog();
+    
+    // node
+    NodePtr node = app->getNode([nid UTF8String]);
+    if (node->isActive()) {
+        
+    }
+}
+
+- (void)nodeClose:(NSString*)nid
+{
+    DLog();
+    
+    // node
+    NodePtr node = app->getNode([nid UTF8String]);
+    
+    // close
+    if (node->isActive()) {
+        node->close();
+    }
+}
+
+- (void)nodeLoad:(NSString*)nid
+{
+    DLog();
+    
+    // node
+    NodePtr node = app->getNode([nid UTF8String]);
+    if (node && ! node->isLoading()) {
+        
+        // flag
+        node->load();
+        
+        // solyaris
+        app->load(node);
+    }
+
+}
+
+- (void)nodeInformation:(NSString*)nid
+{
+
+}
+
+#pragma mark -
+#pragma mark Helpers
+
+/*
+ * Node id.
+ */
+- (NSString*)makeNodeId:(NSNumber*)nid type:(NSString*)type {
+    
+    // make it so
+    return [NSString stringWithFormat:@"%@_%i",type,[nid intValue]];
+}
+
+/*
+ * Edge id.
+ */
+- (NSString*)makeEdgeId:(NSString*)pid to:(NSString *)cid {
+    
+    // theres an edge
+    return [NSString stringWithFormat:@"%@_edge_%@",pid,cid];
+}
+
+/*
+ * Connection id.
+ */
+- (NSString*)makeConnectionId:(NSString *)sid to:(NSString *)nid {
+    
+    // connect this
+    return [NSString stringWithFormat:@"%@_connection_%@",sid,nid];
 }
 
 #pragma mark - 
