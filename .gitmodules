@@ -1,3 +1,6 @@
 [submodule "Submodules/FacebookSDK"]
 	path = Submodules/FacebookSDK
 	url = git@github.com:facebook/facebook-ios-sdk.git
+[submodule "Submodules/AFNetworking"]
+	path = Submodules/AFNetworking
+	url = https://github.com/AFNetworking/AFNetworking.git
