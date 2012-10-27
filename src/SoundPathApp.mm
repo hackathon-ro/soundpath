@@ -63,15 +63,6 @@ void SoundPathApp::setup() {
     conf.setConfiguration(cDeviceRedux,redux ? "1" : "0");
     conf.setConfiguration(cDisplayRetina,retina ? "1" : "0");
     graph.config(conf);
-    
-    
-    // translations
-    I18N tls = I18N();
-    tls.setTranslation(i18nTooltipActor1, [NSLocalizedString(@"graph_tooltip_actor_1", @" is ") UTF8String]);
-    tls.setTranslation(i18nTooltipActor2, [NSLocalizedString(@"graph_tooltip_actor_2", @" in ") UTF8String]);
-    tls.setTranslation(i18nTooltipCrew1, [NSLocalizedString(@"graph_tooltip_crew_1", @" is the ") UTF8String]);
-    tls.setTranslation(i18nTooltipCrew2, [NSLocalizedString(@"graph_tooltip_crew_2", @" of ") UTF8String]);
-    graph.i18n(tls);
 }
 
 
@@ -347,26 +338,6 @@ NodePtr SoundPathApp::getNode(string nid) {
     
     // graph
     return graph.getNode(nid);
-}
-
-/*
- * Creates an edge.
- */
-EdgePtr SoundPathApp::createEdge(string eid, string type, NodePtr n1, NodePtr n2) {
-    GLog();
-    
-    // graph
-    return graph.createEdge(eid,type,n1,n2);
-}
-
-/*
- * Gets an edge.
- */
-EdgePtr SoundPathApp::getEdge(string nid1, string nid2) {
-    GLog();
-    
-    // graph
-    return graph.getEdge(nid1,nid2);
 }
 
 /*

@@ -118,27 +118,14 @@ Node::Node(string idn, double x, double y) {
 /**
  * Node movie.
  */
-NodeMovie::NodeMovie(): Node::Node()  {    
+NodeArtist::NodeArtist(): Node::Node()  {
 }
-NodeMovie::NodeMovie(string idn, double x, double y): Node::Node(idn, x, y) {
+NodeArtist::NodeArtist(string idn, double x, double y): Node::Node(idn, x, y) {
     
     // type
-    this->updateType(nodeMovie);
+    this->updateType(nodeArtist);
 
 }
-
-/**
- * Node person.
- */
-NodePerson::NodePerson(): Node::Node()  {    
-}
-NodePerson::NodePerson(string idn, double x, double y): Node::Node(idn, x, y) {
-    
-    // type
-    this->updateType(nodePerson);
-}
-
-
 
 #pragma mark -
 #pragma mark Cinder
@@ -515,60 +502,6 @@ void Node::born() {
     // state
     active = true;
     closed = false;
-    
-    // children
-    int nb = initial;
-    NodeVectorPtr cnodes;
-    for (NodeIt child = children.begin(); child != children.end(); ++child) {
-        
-        // filter existing
-        if (! (*child)->isActive()) {
-            
-            // parent
-            if ((*child)->parent.lock()) {
-                
-                // unhide
-                (*child)->show(true);
-                
-            }
-            
-            // adopt child
-            else  {
-                
-                // adopt child
-                (*child)->parent = sref;
-                
-                // director
-                if ((*child)->type == nodePersonDirector) {
-                    (*child)->show(false);
-                    cnodes.push_back(*child);
-                }
-                
-                // actor / movie
-                if (((*child)->type == nodePersonActor || (*child)->type == nodeMovie)) {
-                    
-                    // show
-                    if (nb > 0) {
-                        (*child)->show(false);
-                        cnodes.push_back(*child);
-                        nb--;
-                    }
-                    else if (! (*child)->isActive()) {
-                        (*child)->hide(); 
-                    }
-                }
-                
-                
-            }
-            
-        }
-        
-        
-    }
-    
-    // position children
-    this->cposition(cnodes);
-    
 }
 
 /**
@@ -589,7 +522,6 @@ void Node::unfold() {
             rx *= (Rand::randFloat(1) > 0.5) ? 1.0 : -1.0;
             float ry = Rand::randFloat(radius * nodeUnfoldMin,radius * nodeUnfoldMax) + 0.1;
             ry *= (Rand::randFloat(1) > 0.5) ? 1.0 : -1.0;
-            Vec2d p = Vec2d(pos.x+rx,pos.y+ry);
             
             // open & push
             (*child)->open();
@@ -991,7 +923,7 @@ void Node::renderNode() {
     string sfx = retina ? "@2x.png" : ".png";
     
     // movie
-    if (type == nodeMovie) {
+    if (type == nodeArtist) {
         
         // category
         string cat = (category.length()) > 0 ? ("_" + category) : "";
@@ -1003,27 +935,6 @@ void Node::renderNode() {
             textureGlow = gl::Texture(loadImage(loadResource("node_movie_glow"+cat+sfx)));
         }
         
-    }
-    // director / crew
-    else if (type == nodePersonDirector || type == nodePersonCrew) {
-        
-        // texture
-        textureNode = gl::Texture(loadImage(loadResource("node_crew"+sfx)));
-        if  (active || loading) {
-            textureCore = gl::Texture(loadImage(loadResource("node_crew_core"+sfx)));
-            textureGlow = gl::Texture(loadImage(loadResource("node_crew_glow"+sfx)));
-        }
-        
-    }
-    // person
-    else {
-        
-        // texture
-        textureNode = gl::Texture(loadImage(loadResource("node_person"+sfx)));
-        if (active || loading) {
-            textureCore = gl::Texture(loadImage(loadResource("node_person_core"+sfx)));
-            textureGlow = gl::Texture(loadImage(loadResource("node_person_glow"+sfx)));
-        }
     }
 }
 

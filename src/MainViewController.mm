@@ -12,6 +12,7 @@
 #import "MainViewController.h"
 #import "SoundPathAppDelegate.h"
 #import "SPUtils.h"
+#import "Graph.h"
 
 @interface MainViewController ()
 {
@@ -101,72 +102,18 @@
 
 -(void) populate {
     
+    
+    
+    
     // source
     NSString *sid = [self makeNodeId:[NSNumber numberWithInt:0] type:@"movie"];
     NodePtr source = app->getNode([sid UTF8String]);
     if (source == NULL) {
         source = app->createNode([sid UTF8String],[@"movie" UTF8String]);
         source->renderLabel([@"test title 1" UTF8String]);
-        
-        
-        // child
-        NSString *cid = [self makeNodeId:[NSNumber numberWithInt:0] type:@"person"];
-        NodePtr child = app->getNode([cid UTF8String]);
-        bool existing = true;
-        if (child == NULL) {
-            existing = false;
-
-            child = app->createNode([cid UTF8String],[@"person" UTF8String], source->pos.x, source->pos.y);
-            child->renderLabel([@"pers title 1" UTF8String]);
-            child->updateType([@"person_actor" UTF8String]);
-        }
-
-        source->addChild(child);
-        
-        // create edge
-        EdgePtr edge = app->getEdge([sid UTF8String], [cid UTF8String]);
-        if (edge == NULL) {
-            
-            // this is the edge
-            NSString *eid = [self makeEdgeId:sid to:cid];
-            edge = app->createEdge([eid UTF8String],[@"person" UTF8String],source,child);
-            
-            // type
-            edge->updateType([@"person_Actor" UTF8String]);
-            
-            // render
-            edge->renderLabel([@"test edge" UTF8String]);
-        }
-        if (existing) {
-            edge->show();
-        }
-        
     }
     
     source->loaded();
-    
-    // node
-    NSString *nid = [self makeNodeId:[NSNumber numberWithInt:1] type:@"movie"];
-    NodePtr node = app->getNode([nid UTF8String]);
-    if (node == NULL) {
-        node = app->createNode([nid UTF8String],[@"movie" UTF8String]);
-        node->renderLabel([@"test title 2" UTF8String]);
-    }
-    
-    node->loaded();
-    
-    // connection
-    ConnectionPtr connection = app->getConnection([sid UTF8String], [nid UTF8String]);
-    if (connection == NULL) {
-        
-        // create
-        NSString *cid = [self makeConnectionId:sid to:nid];
-        connection = app->createConnection([cid UTF8String],[@"related" UTF8String],source,node);
-        
-        // connect it
-        source->connect(node);
-    }
-    
     
     // active
     if (! (source->isActive() || source->isLoading())) {
@@ -178,15 +125,41 @@
         app->load(source);
     }
     
-    // active
-    if (! (node->isActive() || node->isLoading())) {
-        
-        // load
-        node->load();
-        
-        // solyaris
-        app->load(node);
-    }
+    
+//    for(int i=1; i<5; i++)
+//    {
+//        // node
+//        NSString *nid = [self makeNodeId:[NSNumber numberWithInt:i] type:@"movie"];
+//        NodePtr node = app->getNode([nid UTF8String]);
+//        if (node == NULL) {
+//            node = app->createNode([nid UTF8String],[@"movie" UTF8String]);
+//            node->renderLabel([@"test title 2" UTF8String]);
+//        }
+//        
+//        node->loaded();
+//        
+//        // connection
+//        ConnectionPtr connection = app->getConnection([sid UTF8String], [nid UTF8String]);
+//        if (connection == NULL) {
+//            
+//            // create
+//            NSString *cid = [self makeConnectionId:sid to:nid];
+//            connection = app->createConnection([cid UTF8String],[@"related" UTF8String],source,node);
+//            
+//            // connect it
+//            source->connect(node);
+//        }
+//        
+//        // active
+//        if (! (node->isActive() || node->isLoading())) {
+//            
+//            // load
+//            node->load();
+//            
+//            // solyaris
+//            app->load(node);
+//        }
+//    }
 }
 
 #pragma mark - SoundPathInteractionDelegate
@@ -200,19 +173,6 @@
     // info
     if (node->isActive()) {
         
-        // parent
-        NSString *pid = [NSString stringWithCString:node->nid.c_str() encoding:[NSString defaultCStringEncoding]];
-        
-        
-        // children
-        for (NodeIt child = node->children.begin(); child != node->children.end(); ++child) {
-            
-            // child id
-            NSString *cid = [NSString stringWithCString:(*child)->nid.c_str() encoding:[NSString defaultCStringEncoding]];
-            
-            // edge
-            EdgePtr nedge = app->getEdge([pid UTF8String], [cid UTF8String]);
-        }
     }
 }
 
