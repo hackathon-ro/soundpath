@@ -13,6 +13,7 @@
 
 @interface SoundPathAppDelegate : CinderAppDelegateIPhone
 
+@property (nonatomic, strong) UINavigationController * navigationController;
 @property (nonatomic, strong) UIViewController * mainViewController;
 
 @end

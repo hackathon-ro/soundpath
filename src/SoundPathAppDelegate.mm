@@ -11,6 +11,8 @@
 #import "SPUtils.h"
 
 @implementation SoundPathAppDelegate
+
+@synthesize navigationController;
 @synthesize mainViewController;
 
 #pragma mark -
@@ -24,6 +26,8 @@
     // cinder
     [super applicationDidFinishLaunching:application];
     
+    navigationController = [[UINavigationController alloc] initWithRootViewController:mainViewController];
+    
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
     
     NSString * nibName = iPhone ?
@@ -31,7 +35,11 @@
  
     mainViewController = [[MainViewController alloc] initWithNibName:nibName bundle:nil];
     
-    [window addSubview:mainViewController.view];
+    navigationController = [[UINavigationController alloc] initWithRootViewController:mainViewController];
+    
+    [navigationController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
+    
+    [window addSubview:navigationController.view];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
