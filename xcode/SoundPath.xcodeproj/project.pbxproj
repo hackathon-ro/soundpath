@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 45;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -17,10 +17,6 @@
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
 		43CD9799123D6504003B628E /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 43CD9798123D6504003B628E /* Icon.png */; };
-		670BC21E163C6C46001297F8 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 670BC21D163C6C46001297F8 /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		67ECF438163C5B5900CA4A49 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67ECF436163C5B5900CA4A49 /* AddressBook.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		67ECF439163C5B5900CA4A49 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67ECF437163C5B5900CA4A49 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		67ECF43B163C5B9C00CA4A49 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67ECF43A163C5B9C00CA4A49 /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		67ECF43D163C5BE000CA4A49 /* FacebookSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 67ECF43C163C5BE000CA4A49 /* FacebookSDKResources.bundle */; };
 		67ECF43E163C5CBD00CA4A49 /* libfacebook_ios_sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 67ECF430163C5B3700CA4A49 /* libfacebook_ios_sdk.a */; };
 		67ECF442163C606D00CA4A49 /* LoginViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 67ECF440163C606D00CA4A49 /* LoginViewController.mm */; };
@@ -51,6 +47,10 @@
 		B398D30E163AD2F6003724DB /* SPUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = B398D30D163AD2F6003724DB /* SPUtils.mm */; };
 		B39F3784163BFDF2008E419D /* MainViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = B39F3782163BFDF2008E419D /* MainViewController-iPad.xib */; };
 		B39F3785163BFDF2008E419D /* MainViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = B39F3783163BFDF2008E419D /* MainViewController-iPhone.xib */; };
+		B3A53FFB163C857800B87083 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 670BC21D163C6C46001297F8 /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		B3A53FFC163C857D00B87083 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67ECF43A163C5B9C00CA4A49 /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		B3A53FFD163C857F00B87083 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67ECF436163C5B5900CA4A49 /* AddressBook.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		B3A53FFE163C858200B87083 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67ECF437163C5B5900CA4A49 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C725DFFE121DAC7F00FA186B /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C727C02B121B400300192073 /* CoreMedia.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C725E001121DAC8F00FA186B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C725E000121DAC8F00FA186B /* AVFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C727C02E121B400300192073 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C727C02D121B400300192073 /* CoreVideo.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -151,11 +151,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				670BC21E163C6C46001297F8 /* Accounts.framework in Frameworks */,
 				67ECF43E163C5CBD00CA4A49 /* libfacebook_ios_sdk.a in Frameworks */,
-				67ECF43B163C5B9C00CA4A49 /* Social.framework in Frameworks */,
-				67ECF438163C5B5900CA4A49 /* AddressBook.framework in Frameworks */,
-				67ECF439163C5B5900CA4A49 /* AdSupport.framework in Frameworks */,
+				B3A53FFB163C857800B87083 /* Accounts.framework in Frameworks */,
+				B3A53FFC163C857D00B87083 /* Social.framework in Frameworks */,
+				B3A53FFD163C857F00B87083 /* AddressBook.framework in Frameworks */,
+				B3A53FFE163C858200B87083 /* AdSupport.framework in Frameworks */,
 				00EB544113E25367006BF8E7 /* libz.dylib in Frameworks */,
 				00EB543F13E25352006BF8E7 /* CoreText.framework in Frameworks */,
 				00EB53F013E250DA006BF8E7 /* AudioToolbox.framework in Frameworks */,
@@ -204,10 +204,6 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				670BC21D163C6C46001297F8 /* Accounts.framework */,
-				67ECF43A163C5B9C00CA4A49 /* Social.framework */,
-				67ECF436163C5B5900CA4A49 /* AddressBook.framework */,
-				67ECF437163C5B5900CA4A49 /* AdSupport.framework */,
 				00CFDFB81138492F0091E310 /* Headers */,
 				00CFDFA7113848F40091E310 /* Source */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -236,6 +232,10 @@
 				67ECF427163C5B3700CA4A49 /* facebook-ios-sdk.xcodeproj */,
 				00EB543E13E25352006BF8E7 /* CoreText.framework */,
 				00EB544013E25367006BF8E7 /* libz.dylib */,
+				670BC21D163C6C46001297F8 /* Accounts.framework */,
+				67ECF43A163C5B9C00CA4A49 /* Social.framework */,
+				67ECF436163C5B5900CA4A49 /* AddressBook.framework */,
+				67ECF437163C5B5900CA4A49 /* AdSupport.framework */,
 				C727C02B121B400300192073 /* CoreMedia.framework */,
 				C727C02D121B400300192073 /* CoreVideo.framework */,
 				28FD15070DC6FC5B0079059D /* QuartzCore.framework */,
@@ -377,8 +377,11 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0450;
+			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "SoundPath" */;
-			compatibilityVersion = "Xcode 3.1";
+			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
@@ -553,7 +556,6 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
-				PREBINDING = NO;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				SYMROOT = ./build;
@@ -575,7 +577,6 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
-				PREBINDING = NO;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				SYMROOT = ./build;

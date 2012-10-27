@@ -126,40 +126,40 @@
     }
     
     
-//    for(int i=1; i<5; i++)
-//    {
-//        // node
-//        NSString *nid = [self makeNodeId:[NSNumber numberWithInt:i] type:@"movie"];
-//        NodePtr node = app->getNode([nid UTF8String]);
-//        if (node == NULL) {
-//            node = app->createNode([nid UTF8String],[@"movie" UTF8String]);
-//            node->renderLabel([@"test title 2" UTF8String]);
-//        }
-//        
-//        node->loaded();
-//        
-//        // connection
-//        ConnectionPtr connection = app->getConnection([sid UTF8String], [nid UTF8String]);
-//        if (connection == NULL) {
-//            
-//            // create
-//            NSString *cid = [self makeConnectionId:sid to:nid];
-//            connection = app->createConnection([cid UTF8String],[@"related" UTF8String],source,node);
-//            
-//            // connect it
-//            source->connect(node);
-//        }
-//        
-//        // active
-//        if (! (node->isActive() || node->isLoading())) {
-//            
-//            // load
-//            node->load();
-//            
-//            // solyaris
-//            app->load(node);
-//        }
-//    }
+    for(int i=1; i<5; i++)
+    {
+        // node
+        NSString *nid = [self makeNodeId:[NSNumber numberWithInt:i] type:@"movie"];
+        NodePtr node = app->getNode([nid UTF8String]);
+        if (node == NULL) {
+            node = app->createNode([nid UTF8String],[@"movie" UTF8String]);
+            node->renderLabel([@"test title 2" UTF8String]);
+        }
+        
+        node->loaded();
+        
+        // connection
+        ConnectionPtr connection = app->getConnection([sid UTF8String], [nid UTF8String]);
+        if (connection == NULL) {
+            
+            // create
+            NSString *cid = [self makeConnectionId:sid to:nid];
+            connection = app->createConnection([cid UTF8String],[@"related" UTF8String],source,node);
+            
+            // connect it
+            source->connect(node);
+        }
+        
+        // active
+        if (! (node->isActive() || node->isLoading())) {
+            
+            // load
+            node->load();
+            
+            // solyaris
+            app->load(node);
+        }
+    }
 }
 
 #pragma mark - SoundPathInteractionDelegate
