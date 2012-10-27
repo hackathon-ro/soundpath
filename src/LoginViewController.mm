@@ -8,13 +8,14 @@
 
 #import "LoginViewController.h"
 #import "SoundPathAppDelegate.h"
-
+#import "SPUtils.h"
 
 @interface LoginViewController ()
 {
     SoundPathAppDelegate * appDelegate;
     UIAlertView * fbFailAlertView;
 }
+
 @end
 
 @implementation LoginViewController
@@ -175,47 +176,27 @@
     if ([result isKindOfClass:[NSArray class]]) {
         result = [result objectAtIndex:0];
     }
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
     // This callback can be a result of getting the user's basic
     // information or getting the user's permissions.
     if ([result objectForKey:@"name"]) {
-        // If basic information callback, set the UI objects to
-        // display this.
-        NSLog(@"name:%@\nuid:%@",[result objectForKey:@"name"],[result objectForKey:@"uid"]);
-        // Get the profile image
-//        UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[result objectForKey:@"pic"]]]];
-        NSLog(@"iamge:%@",[result objectForKey:@"pic"]);
-        // Resize, crop the image to make sure it is square and renders
-        // well on Retina display
-//        float ratio;
-//        float delta;
-//        float px = 100; // Double the pixels of the UIImageView (to render on Retina)
-//        CGPoint offset;
-//        CGSize size = image.size;
-//        if (size.width > size.height) {
-//            ratio = px / size.width;
-//            delta = (ratio*size.width - ratio*size.height);
-//            offset = CGPointMake(delta/2, 0);
-//        } else {
-//            ratio = px / size.height;
-//            delta = (ratio*size.height - ratio*size.width);
-//            offset = CGPointMake(0, delta/2);
-//        }
-//        CGRect clipRect = CGRectMake(-offset.x, -offset.y,
-//                                     (ratio * size.width) + delta,
-//                                     (ratio * size.height) + delta);
-//        UIGraphicsBeginImageContext(CGSizeMake(px, px));
-//        UIRectClip(clipRect);
-//        [image drawInRect:clipRect];
-//        UIImage *imgThumb = UIGraphicsGetImageFromCurrentImageContext();
-//        UIGraphicsEndImageContext();
-//        [profilePhotoImageView setImage:imgThumb];
         
-        [self apiGraphUserPermissions];
-    } else {
-        // Processing permissions information
-//        HackbookAppDelegate *delegate = (HackbookAppDelegate *)[[UIApplication sharedApplication] delegate];
-        [appDelegate setUserPermissions:[[result objectForKey:@"data"] objectAtIndex:0]];
+        [defaults setObject:[result objectForKey:@"name"] forKey:kName];
+        
+        if([result objectForKey:@"uid"]){
+            [defaults setObject:[result objectForKey:@"uid"] forKey:kUid];
+        }
+        if([result objectForKey:@"pic"]){
+            [defaults setObject:[result objectForKey:@"pic"] forKey:kImage];
+        }
+        
+        [defaults synchronize];
+        [appDelegate testBands];
     }
+
+    
 }
 
 /**

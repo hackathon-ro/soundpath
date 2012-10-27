@@ -67,10 +67,10 @@
 #pragma mark - Custom requests
 
 
-+ (void) getBands:(NSDictionary*) params andBlock:(void (^)(NSDictionary *tweets))block {
++ (void) getBands:(NSDictionary*) params andBlock:(void (^)(NSArray *response))block {
     
     [[SPHTTPClient sharedHTTPClient]
-     postPath:kServiceBands
+     getPath:kServiceBands
      parameters:params
      success:^(AFHTTPRequestOperation *operation, id JSON) {
          //        NSDictionary *mutableTweets = [NSDictionary dictionary];
@@ -80,7 +80,7 @@
          //         mutableTweets = [NSDictionary dictionaryWithDictionary:JSON objectForKey:@"userdata"] objectForKey:@"User"]];
          
          if (block) {
-             block([NSDictionary dictionaryWithDictionary:JSON]);
+             block([NSArray arrayWithArray:JSON]);
              
          }
          

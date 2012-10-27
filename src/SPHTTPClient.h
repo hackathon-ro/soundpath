@@ -14,6 +14,6 @@
 
 //+ (BOOL) checkConnection;
 
-+ (void) getBands:(NSDictionary*) params andBlock:(void (^)(NSDictionary *response))block;
++ (void) getBands:(NSDictionary*) params andBlock:(void (^)(NSArray *response))block;
 
 @end

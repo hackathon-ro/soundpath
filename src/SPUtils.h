@@ -12,10 +12,15 @@
 #define iPhone                          (UI_USER_INTERFACE_IDIOM()==UIUserInterfaceIdiomPhone)
 
 // HTTP constants
-static NSString * kSERVER_BASE = @"http://http://10.10.1.80:3000/";
+static NSString * kSERVER_BASE = @"http://10.10.1.80:3000/";
 
-// post paths constants
+// webservices paths constants
 static NSString * kServiceBands = @"bands";
+
+// NSUserDefaults constants
+static NSString *kUid = @"uid";
+static NSString *kImage = @"image";
+static NSString *kName = @"name";
 
 /**
  * Utils.
