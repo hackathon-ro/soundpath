@@ -26,8 +26,6 @@
     // cinder
     [super applicationDidFinishLaunching:application];
     
-    navigationController = [[UINavigationController alloc] initWithRootViewController:mainViewController];
-    
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
     
     NSString * nibName = iPhone ?
