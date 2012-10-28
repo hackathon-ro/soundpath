@@ -208,9 +208,9 @@ static NSString* kFacebookAppId = @"465005836872056";
         }
         
         [defaults synchronize];
-        [self testBands];
+//        [self testBands];
         
-//        [self ApiTest];
+        [self ApiTest];
     }
     
    
@@ -276,19 +276,21 @@ static NSString* kFacebookAppId = @"465005836872056";
 //                    }
 //                }];
 
-                [SPHTTPClient getBandInfo:params withId:[(NSDictionary*)[response objectAtIndex:0] valueForKey:@"page_id"] andBlock:^(NSDictionary *response) {
-                    if (response) {
-                        DLog();
-                        NSLog(@"%@",response);
-                        
-                    }
-                }];
+//                [SPHTTPClient getBandInfo:params withId:[(NSDictionary*)[response objectAtIndex:0] valueForKey:@"page_id"] andBlock:^(NSDictionary *response) {
+//                    if (response) {
+//                        DLog();
+//                        NSLog(@"%@",response);
+//                        
+//                    }
+//                }];
                 
                 BandApi * bApi = [[BandApi alloc] init];
                 bApi.delegate = nil;
                 
-                for(NSDictionary * d in response)
+                for(NSDictionary * d in response){
                     [bApi getBand:[d valueForKey:@"page_id"]];
+                    
+                }
                 
             }
         }

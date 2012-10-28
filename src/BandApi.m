@@ -102,6 +102,67 @@ static NSString * kSoundPathDB = @"SoundPath.sqlite";
         
         NSLog(@"get band %@",band.page_id);
         
+        // get related bands
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSString * token = [defaults objectForKey:@"FBAccessTokenKey"];
+        
+        NSDictionary * params = [NSDictionary dictionaryWithObjectsAndKeys:[defaults objectForKey:kUid],@"uid",token,@"token", nil];
+        
+        [SPHTTPClient getRelatedBands:params withId:band.page_id andBlock:^(NSArray *rresponse) {
+            if (rresponse) {
+                DLog();
+                NSLog(@"%@",rresponse);
+                
+                for(NSDictionary * dd in rresponse){
+                    [self getRelatedBand:[dd valueForKey:@"page_id"] forBand:band.page_id];
+                }
+                
+            }
+        }];
+
+        
+        // delegate
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            
+            // delegate
+            if (delegate != nil && [delegate respondsToSelector:@selector(loadBand:)]) {
+                [delegate loadBand:band_id];
+            }
+            
+        }];
+        
+    }];
+    
+}
+
+- (void)getRelatedBand:(NSString*) related_band_id forBand:(NSString*) band_id{
+    DLog();
+    
+    // queue
+    [queue addOperationWithBlock:^{
+        
+        // context
+        [managedObjectContext lock];
+        
+        // cached
+        Band *band = [self getBandFromCache:related_band_id];
+        
+        // query
+        if (band == nil) {
+            band = [self getBandFromServer:related_band_id];
+        }
+        [managedObjectContext unlock];
+        
+        NSLog(@"get related band %@",band.page_id);
+        
+        // add this band to related bands for band_id
+        Band *b = [self getBandFromCache:band_id];
+        if(b) {
+            NSMutableSet * mset = [NSMutableSet set];
+            [mset addObject:band];
+            b.liked_bands = [NSSet setWithSet:mset];
+        }
+        
         // delegate
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             
@@ -138,7 +199,7 @@ static NSString * kSoundPathDB = @"SoundPath.sqlite";
     NSArray *array = [moc executeFetchRequest:request error:&error];
 
     // result
-    Band *b = NULL;
+    Band *b = nil;
     if (array != nil && [array count] > 0) {
         b = (Band*) [array objectAtIndex:0];
     }
@@ -241,188 +302,6 @@ static NSString * kSoundPathDB = @"SoundPath.sqlite";
 
 }
 
-/*
- * Query popular.
- */
-//- (Popular*)queryPopularMovies:(NSString *)ident retry:(BOOL)retry {
-//    FLog();
-//    
-//    // track
-//    [Tracker trackEvent:TEventAPI action:@"Query" label:@"queryPopularMovies"];
-//    
-//    // popular data
-//    Popular *popular = [self cachedPopular:ident type:typeMovie];
-//    if (popular == NULL) {
-//        
-//        // create
-//        popular = (Popular*)[NSEntityDescription insertNewObjectForEntityForName:@"Popular" inManagedObjectContext:managedObjectContext];
-//        popular.type = typeMovie;
-//        popular.ident = ident;
-//        popular.page = [NSNumber numberWithInt:0];
-//        popular.count = [NSNumber numberWithInt:0];
-//        popular.parsed = [NSNumber numberWithInt:0];
-//        popular.total = [NSNumber numberWithInt:0];
-//    }
-//    
-//    
-//    // queue time
-//    [NSThread sleepForTimeInterval:kTMDbTimeQueueBase+((rand() / RAND_MAX) * kTMDbTimeQueueRandom)];
-//    FLog("Send request...");
-//    
-//    // request
-//    NSString *url = [NSString stringWithFormat:@"%@?api_key=%@&page=%i",apiTMDbPopularMovies,apiTMDbKey,[popular.page intValue]+1];
-//    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]
-//                                             cachePolicy:NSURLRequestReloadIgnoringCacheData
-//                                         timeoutInterval:kTMDbTimeout];
-//    
-//    // response
-//    NSError *error = nil;
-//    NSURLResponse *response = nil;
-//#ifdef DEBUG
-//    NSLog(@"%@",url);
-//#endif
-//    
-//    // connection
-//    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-//    FLog("received data.");
-//    
-//    // connection error
-//    if (error) {
-//        
-//        // rollback
-//        [managedObjectContext rollback];
-//        
-//        // delegate
-//        if (delegate && [delegate respondsToSelector:@selector(apiError:)]) {
-//            
-//            // error
-//            APIError *apiError = [[[APIError alloc] initError:typeMovie
-//                                                        title:NSLocalizedString(@"Connection Error", @"Connection Error")
-//                                                      message:[error localizedDescription]] autorelease];
-//            [delegate performSelectorOnMainThread:@selector(apiError:) withObject:apiError waitUntilDone:NO];
-//        }
-//        
-//        // nothing
-//        return NULL;
-//    }
-//    
-//    // json
-//    NSString *json = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
-//    
-//    // invalid response
-//    if (! [self validResponse:json]) {
-//#ifdef DEBUG
-//        NSLog(@"Invalid popular query: %@", ident);
-//        NSLog(@"%@",json);
-//#endif
-//        
-//        // back
-//        [managedObjectContext rollback];
-//        
-//        // retry
-//        if (retry) {
-//            FLog("Wait...");
-//            [NSThread sleepForTimeInterval:kTMDbTimeRetryBase+((rand() / RAND_MAX) * kTMDbTimeRetryRandom)];
-//            FLog("... and try again.");
-//            return [self queryPopularMovies:ident retry:NO];
-//        }
-//        
-//        // note
-//        if (delegate && [delegate respondsToSelector:@selector(apiGlitch:)]) {
-//            APIError *apiError = [[[APIError alloc] initError:typeMovie
-//                                                        title:NSLocalizedString(@"TMDb Service Unavailable", @"TMDb Service Unavailable")
-//                                                      message:NSLocalizedString(@"Could not load movies. \nPlease try again later.", @"Could not load movies. \nPlease try again later.")] autorelease];
-//            [delegate performSelectorOnMainThread:@selector(apiGlitch:) withObject:apiError waitUntilDone:NO];
-//        }
-//        
-//        // nuff
-//        return NULL;
-//        
-//    }
-//    
-//    
-//    
-//    // parse result
-//    int count = 0;
-//    int parsed = 0;
-//    int sort = [popular.count intValue];
-//    if ([self validResult:json]) {
-//        
-//        // parse
-//        SBJsonParser *parser = [[SBJsonParser alloc] init];
-//        NSDictionary *djson = [parser objectWithString:json error:nil];
-//        [parser release];
-//        
-//        // results
-//        NSArray *results = [djson objectForKey:@"results"];
-//        for (NSDictionary *dresult in results)	{
-//            parsed++;
-//            
-//            // result data
-//            PopularResult *popularResult = (PopularResult*)[NSEntityDescription insertNewObjectForEntityForName:@"PopularResult" inManagedObjectContext:managedObjectContext];
-//            
-//            // validate
-//            if ([self validPopular:dresult]) {
-//                
-//                // dta
-//                NSString *dta = [self parseString:[dresult objectForKey:@"original_title"]];
-//                if (! [self isEmpty:[dresult objectForKey:@"release_date"]]) {
-//                    dta = [NSString stringWithFormat:@"%@ (%@)",dta,[self parseYear:[dresult objectForKey:@"release_date"]]];
-//                }
-//                
-//                // data
-//                popularResult.ref = [self parseNumber:[dresult objectForKey:@"id"]];
-//                popularResult.data = dta;
-//                popularResult.type = typeMovie;
-//                popularResult.thumb = [self parseImage:[dresult objectForKey:@"poster_path"] type:apiTMDbPosterThumb];
-//                popularResult.sort = [NSNumber numberWithInt:sort];
-//                
-//                // add
-//                count++;
-//                sort++;
-//                [popular addResultsObject:popularResult];
-//            }
-//        }
-//        
-//        // total
-//        popular.total = [self parseNumber:[djson objectForKey:@"total_results"]];
-//        
-//    }
-//    
-//    // parsed
-//    popular.parsed = [NSNumber numberWithInt:[popular.parsed intValue] + parsed];
-//    
-//    // count
-//    popular.count = [NSNumber numberWithInt:[popular.count intValue] + count];
-//    
-//    // page
-//    popular.page = [NSNumber numberWithInt:[popular.page intValue] + 1];
-//    
-//    
-//    // save
-//    if (! [managedObjectContext save:&error]) {
-//        
-//        // error
-//        if (delegate && [delegate respondsToSelector:@selector(apiError:)]) {
-//            APIError *apiError = [[[APIError alloc] initError:typeMovie
-//                                                        title:NSLocalizedString(@"Data Error", @"Data Error")
-//                                                      message:[error localizedDescription]] autorelease];
-//            [delegate performSelectorOnMainThread:@selector(apiError:) withObject:apiError waitUntilDone:NO];
-//        }
-//        
-//        // handle the error
-//        NSLog(@"TMDb CoreData Error\n%@\n%@", error, [error userInfo]);
-//        [managedObjectContext rollback];
-//        
-//        // null
-//        return NULL;
-//        
-//    }
-//    
-//    // you are so popular
-//    return popular;
-//    
-//}
 
 
 #pragma mark -
@@ -547,7 +426,7 @@ static NSString * kSoundPathDB = @"SoundPath.sqlite";
     NSLog(@"=>RESULTS:\n");
     
     for(Band * b in mutableFetchResults)
-        NSLog(@"%@",b.page_id);
+        NSLog(@"%@",b.name);
 	
 }
 
