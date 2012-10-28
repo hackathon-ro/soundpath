@@ -14,6 +14,8 @@
 #import "SPUtils.h"
 #import "Graph.h"
 
+#import "BrowserViewController.h"
+
 @interface MainViewController ()
 {
     SoundPathApp *app;
@@ -30,7 +32,7 @@
 @end
 
 @implementation MainViewController
-
+@synthesize popOver;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -67,10 +69,45 @@
     }
 }
 
+- (void) showPopover {
+    NSURL *url = [NSURL URLWithString:@"http://www.youtube.com/results?search_query=metallica+unforgiven"];
+    BrowserViewController *bvc = [[BrowserViewController alloc] initWithUrls:url];
+    
+//    [self.navigationController pushViewController:bvc animated:YES];
+    if(!popOver) {
+        popOver = [[UIPopoverController alloc] initWithContentViewController:bvc];
+        popOver.delegate = self;
+    }
+        [popOver setPopoverContentSize:CGSizeMake(300, 300)];
+        [popOver presentPopoverFromBarButtonItem:self.navigationItem.rightBarButtonItem permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
+    
+   
+}
+
+
+- (void) showInfo {
+//    NSURL *url = [NSURL URLWithString:@"http://www.youtube.com/results?search_query=metallica+unforgiven"];
+//    BrowserViewController *bvc = [[BrowserViewController alloc] initWithUrls:url];
+    
+//    [self.navigationController pushViewController:bvc animated:YES];
+//    if(!popOver)
+//        popOver = [[UIPopoverController alloc] initWithContentViewController:bvc];
+//
+//    [popOver presentPopoverFromBarButtonItem:self.navigationItem.rightBarButtonItem permittedArrowDirections:UIPopoverArrowDirectionDown animated:YES];
+}
+
+
 -(void)viewDidLoad {
 	[super viewDidLoad];
 	FLog();
    
+    UIBarButtonItem * btn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(showPopover)];
+    self.navigationItem.rightBarButtonItem = btn;
+
+    UIBarButtonItem * btn2 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemBookmarks target:self action:@selector(showInfo)];
+    self.navigationItem.leftBarButtonItem = btn2;
+
+    
     // pinch gesture recognizer
     UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinched:)];
     [self.view addGestureRecognizer:pinchGesture];
@@ -85,12 +122,17 @@
     
     app = (SoundPathApp*)cinder::app::AppCocoaTouch::get();
     app->interopDelegate = self;
+    
+       
+
 }
 
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     [self populate];
+    
+   
 }
 
 - (void) viewDidDisappear:(BOOL)animated
@@ -366,6 +408,11 @@
     
     // forward to cinder
     app->pinched(recognizer);
+}
+
+
+- (void) popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
+    self.popOver = nil;
 }
 
 #pragma mark -

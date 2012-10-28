@@ -14,4 +14,6 @@
                                                     UIAlertViewDelegate,
                                                     SPInteropDelegate>
 
+@property (strong, nonatomic) UIPopoverController * popOver;
+
 @end

@@ -31,7 +31,7 @@
 
 @property (nonatomic, weak) id <APIDelegate> delegate;
 
-- (void)fetchRecords;
+- (NSMutableArray*)fetchRecords;
 - (void)getBand:(NSString*) band_id;
 - (void)getRelatedBand:(NSString*) related_band_id forBand:(NSString*) band_id;
 

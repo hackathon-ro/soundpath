@@ -261,9 +261,9 @@ static NSString * kSoundPathDB = @"SoundPath.sqlite";
                ![(NSNull*)[response valueForKey:@"listeners"] isEqual:[NSNull null]])
                 band.listeners = [response valueForKey:@"listeners"];
             
-            if([response valueForKey:@"tags"] &&
-               ![(NSNull*)[response valueForKey:@"tags"] isEqual:[NSNull null]])
-                band.tags = [response valueForKey:@"tags"];
+//            if([response valueForKey:@"tags"] &&
+//               ![(NSNull*)[response valueForKey:@"tags"] isEqual:[NSNull null]])
+//                band.tags = [response valueForKey:@"tags"];
             
             if([response valueForKey:@"name"] &&
                ![(NSNull*)[response valueForKey:@"name"] isEqual:[NSNull null]])
@@ -396,7 +396,7 @@ static NSString * kSoundPathDB = @"SoundPath.sqlite";
     return persistentStoreCoordinator;
 }
 
-- (void)fetchRecords {
+- (NSMutableArray *)fetchRecords {
 	
 	// Define our table/entity to use
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Band" inManagedObjectContext:managedObjectContext];
@@ -427,6 +427,8 @@ static NSString * kSoundPathDB = @"SoundPath.sqlite";
     
     for(Band * b in mutableFetchResults)
         NSLog(@"%@",b.name);
+    
+    return mutableFetchResults;
 	
 }
 

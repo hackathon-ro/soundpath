@@ -14,6 +14,8 @@
 #import "SPHTTPClient.h"
 #import "BandApi.h"
 
+
+
 static NSString* kFacebookAppId = @"465005836872056";
 
 @implementation SoundPathAppDelegate
@@ -24,6 +26,7 @@ static NSString* kFacebookAppId = @"465005836872056";
 @synthesize facebook;
 @synthesize userPermissions;
 @synthesize login;
+
 
 #pragma mark -
 #pragma mark Application lifecycle
@@ -81,6 +84,8 @@ static NSString* kFacebookAppId = @"465005836872056";
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSLog(@"token:%@",[defaults objectForKey:@"FBAccessTokenKey"]);
         [self apiFQLIMe];
+        
+
     }
     
 }
@@ -208,9 +213,9 @@ static NSString* kFacebookAppId = @"465005836872056";
         }
         
         [defaults synchronize];
-//        [self testBands];
+        [self testBands];
         
-        [self ApiTest];
+//        [self ApiTest];
     }
     
    
@@ -338,5 +343,6 @@ static NSString* kFacebookAppId = @"465005836872056";
     [bApi fetchRecords];
     
 }
+
 
 @end
