@@ -37,8 +37,6 @@
 #include "Configuration.h"
 
 
-
-
 // namespace
 using namespace std;
 using namespace ci;
@@ -52,10 +50,6 @@ typedef boost::shared_ptr<Node> NodePtr;
 typedef boost::weak_ptr<Node> NodeWeakPtr;
 typedef std::vector<NodePtr> NodeVectorPtr;
 typedef NodeVectorPtr::iterator NodeIt;
-
-
-// constants
-const string nodeArtist = "artist";
 
 // lengths
 const float nodeUnfoldMin = 0.9f;
@@ -75,7 +69,7 @@ class Node {
     
     // Node
     Node();
-    Node(string idn, double x, double y); 
+    Node(unsigned int idn, double x, double y);
     
     // Cinder
     void config(Configuration c);
@@ -120,9 +114,14 @@ class Node {
     bool isSelected();
     bool isLoading();
     
+    // Children
+    void setChildren(NodeVectorPtr children);
+    void clearChildren();
+    void addChild(NodePtr child);
+    void removeChild(NodePtr child);
     
     // Public Fields
-    string nid;
+    unsigned int nid;
     string label;
     string meta;
     string type;
@@ -136,8 +135,11 @@ class Node {
     float radius,growr,shrinkr;
     float mass;
 	Vec2d velocity;
-
-    int numConnections;
+    
+    
+    double dist;
+    
+    NodeVectorPtr children;
     
     // private
     private:
@@ -157,7 +159,6 @@ class Node {
     // Parameters
     double perimeter;
     double zone;
-    double dist;
     double damping;
     double strength;
     float stiffness;
@@ -190,13 +191,4 @@ class Node {
     Vec2d loff;
     gl::Texture	textureLabel;
 
-};
-class NodeArtist: public Node {
-    
-    // public
-    public:
-    
-    // Node
-    NodeArtist();
-    NodeArtist(string idn, double x, double y);
 };

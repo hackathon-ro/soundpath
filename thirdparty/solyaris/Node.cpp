@@ -21,7 +21,7 @@
 //  along with Solyaris.  If not, see www.gnu.org/licenses/.
 
 #include "Node.h"
-
+#include "Connection.h"
 
 #pragma mark -
 #pragma mark Object
@@ -30,9 +30,9 @@
  * Creates a Node.
  */
 Node::Node() {
-    Node("nid",0,0);
+    Node(0,0,0);
 }
-Node::Node(string idn, double x, double y) {
+Node::Node(unsigned int idn, double x, double y) {
     GLog();
     
     // node
@@ -114,18 +114,6 @@ Node::Node(string idn, double x, double y) {
     
     // children
     initial = redux ? 5 : 8;
-}
-
-/**
- * Node movie.
- */
-NodeArtist::NodeArtist(): Node::Node()  {
-}
-NodeArtist::NodeArtist(string idn, double x, double y): Node::Node(idn, x, y) {
-    
-    // type
-    this->updateType(nodeArtist);
-
 }
 
 #pragma mark -
@@ -726,7 +714,45 @@ bool Node::isLoading() {
     return loading;
 }
 
+/*
+ * Children
+ */
 
+// Children
+void Node::setChildren(NodeVectorPtr some_children)
+{
+    children.clear();
+    
+    for (NodeIt node = some_children.begin(); node != some_children.end(); ++node) {
+        children.push_back(*node);
+    }
+}
+
+void Node::clearChildren()
+{
+    children.clear();
+}
+void Node::addChild(NodePtr child)
+{
+    children.push_back(child);
+}
+void Node::removeChild(NodePtr child)
+{
+    // erase from children
+    int eraser = -1;
+    int index = 0;
+    unsigned int nid = child->nid;
+    
+    for (NodeIt node = children.begin(); node != children.end(); ++node) {
+        if ((*node)->nid == nid) {
+            eraser = index;
+        }
+        index++;
+    }
+    if (eraser >= 0) {
+        children.erase(children.begin()+eraser);
+    }
+}
 
 /**
  * Renders the label.
@@ -759,16 +785,11 @@ void Node::renderNode() {
     
     // suffix
     string sfx = retina ? "@2x.png" : ".png";
-    
-    // movie
-    if (type == nodeArtist) {
         
-        // texture
-        textureNode = gl::Texture(loadImage(loadResource("node_movie"+sfx)));
-        if (active || loading) {
-            textureGlow = gl::Texture(loadImage(loadResource("node_movie_glow"+sfx)));
-        }
-        
+    // texture
+    textureNode = gl::Texture(loadImage(loadResource("node_movie"+sfx)));
+    if (active || loading) {
+        textureGlow = gl::Texture(loadImage(loadResource("node_movie_glow"+sfx)));
     }
 }
 

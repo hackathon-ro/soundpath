@@ -31,16 +31,18 @@
  */
 Connection::Connection() {
 }
-Connection::Connection(string idc, NodePtr n1, NodePtr n2) {
+Connection::Connection(NodePtr n1, NodePtr n2) {
     
     // fields
-    cid = idc;
     redux = false;
     retina = false;
     
     // nodes
-    wnode1 = NodeWeakPtr(n1);
-    wnode2 = NodeWeakPtr(n2);
+    node1 = n1;
+    node2 = n2;
+    
+    nid1 = n1->nid;
+    nid2 = n2->nid;
     
     // state
     selected = false;
@@ -54,20 +56,6 @@ Connection::Connection(string idc, NodePtr n1, NodePtr n2) {
     d = 4.0;
 
 }
-
-
-/**
- * Connection related.
- */
-ConnectionRelated::ConnectionRelated(): Connection::Connection()  {    
-}
-ConnectionRelated::ConnectionRelated(string idc, NodePtr n1, NodePtr n2): Connection::Connection(idc,n1,n2) {
-    
-    // type
-    type = connectionRelated;
-}
-
-
 
 #pragma mark -
 #pragma mark Cinder
@@ -97,6 +85,21 @@ void Connection::config(Configuration c) {
     
 }
 
+bool Connection::isVisible()
+{
+    return visible;
+}
+
+void Connection::hide()
+{
+    visible = FALSE;
+}
+
+void Connection::show()
+{
+    visible = TRUE;
+}
+
 #pragma mark -
 #pragma mark Sketch
 
@@ -105,10 +108,6 @@ void Connection::config(Configuration c) {
  */
 void Connection::update() {
     
-    
-    // nodes
-    NodePtr node1 = wnode1.lock();
-    NodePtr node2 = wnode2.lock();
     if (node1 && node2) {
         
         // selected
@@ -126,9 +125,6 @@ void Connection::update() {
  */
 void Connection::draw() {
     
-    // nodes
-    NodePtr node1 = wnode1.lock();
-    NodePtr node2 = wnode2.lock();
     if (node1 && node2) {
         
         // unblend

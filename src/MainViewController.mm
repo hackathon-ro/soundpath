@@ -19,6 +19,8 @@
     SoundPathApp *app;
 
     CinderViewCocoaTouch * cinderView;
+    
+    unsigned int ids;
 }
 @end
 
@@ -65,6 +67,8 @@
             break;
         }
     }
+    
+    ids = 0;
 }
 
 -(void)viewDidLoad {
@@ -90,7 +94,7 @@
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self populate];
+    [self initMe];
 }
 
 - (void) viewDidDisappear:(BOOL)animated
@@ -100,14 +104,14 @@
 
 #pragma mark - testing
 
--(void) populate {
+-(void) initMe {
     
     // source
-    NSString *sid = [self makeNodeId:[NSNumber numberWithInt:0] type:@"artist"];
-    NodePtr source = app->getNode([sid UTF8String]);
+    unsigned int sid = 0;
+    NodePtr source = app->getNode(sid);
     if (source == NULL) {
-        source = app->createNode([sid UTF8String],[@"artist" UTF8String]);
-        source->renderLabel([@"title 1" UTF8String]);
+        source = app->createNode(sid,[@"node" UTF8String]);
+        source->renderLabel([@"Me" UTF8String]);
     }
     
     // active
@@ -118,84 +122,21 @@
     }
     
     source->loaded();
-    
-    source->numConnections = 5;
-    
-    for(int i=1; i<5; i++)
-    {
-        // node
-        NSString *nid = [self makeNodeId:[NSNumber numberWithInt:i] type:@"artist"];
-        NodePtr node = app->getNode([nid UTF8String]);
-        if (node == NULL) {
-            node = app->createNode([nid UTF8String],[@"artist" UTF8String]);
-            node->renderLabel([[NSString stringWithFormat:@"title%d", i] UTF8String]);
-        }
-        
-        // connection
-        ConnectionPtr connection = app->getConnection([sid UTF8String], [nid UTF8String]);
-        if (connection == NULL) {
-            
-            // create
-            NSString *cid = [self makeConnectionId:sid to:nid];
-            connection = app->createConnection([cid UTF8String],[@"related" UTF8String],source,node);
-            
-            // connect it
-            source->connect(node);
-        }
-        
-        // active
-        if (! (node->isActive() || node->isLoading())) {
-            
-            // load
-            node->load();
-        }
-    }
 }
 
 #pragma mark - SoundPathInteractionDelegate
-- (void)nodeInfo:(NSString*)nid
+- (void)nodeInfo:(unsigned int)nid
 {
     DLog();
     
-    // node
-    NodePtr node = app->getNode([nid UTF8String]);
-    
-    // info
-    if (node->isActive()) {
-        
-    }
 }
 
-- (void)nodeRelated:(NSString*)nid
+- (void)nodeLoad:(unsigned int)nid
 {
     DLog();
     
     // node
-    NodePtr node = app->getNode([nid UTF8String]);
-    if (node->isActive()) {
-        
-    }
-}
-
-- (void)nodeClose:(NSString*)nid
-{
-    DLog();
-    
-    // node
-    NodePtr node = app->getNode([nid UTF8String]);
-    
-    // close
-    if (node->isActive()) {
-        node->close();
-    }
-}
-
-- (void)nodeLoad:(NSString*)nid
-{
-    DLog();
-    
-    // node
-    NodePtr node = app->getNode([nid UTF8String]);
+    NodePtr node = app->getNode(nid);
     if (node && ! node->isLoading()) {
         
         // flag
@@ -204,43 +145,41 @@
         // solyaris
         app->load(node);
     }
-
 }
 
-- (void)nodeInformation:(NSString*)nid
+- (void) nodeTapped:(unsigned int)nid
 {
-
-}
-
-#pragma mark -
-#pragma mark Helpers
-
-/*
- * Node id.
- */
-- (NSString*)makeNodeId:(NSNumber*)nid type:(NSString*)type {
+    // node
+    NodePtr source = app->getNode(nid);
     
-    // make it so
-    return [NSString stringWithFormat:@"%@_%i",type,[nid intValue]];
+    // info
+    if (source->isActive()) {
+        NodeVectorPtr nodes;
+        
+        app->hideSubChildren(source);
+        
+        for(int i=1; i<5; i++)
+        {
+            ids++;
+            
+            // node
+            unsigned int nid = ids;
+            
+            NodePtr node = app->createNode(nid,[@"node" UTF8String]);
+            node->renderLabel([[NSString stringWithFormat:@"title%d", ids] UTF8String]);
+            
+            node->load();
+            node->loaded();
+            
+            nodes.push_back(node);
+            
+            
+        }
+        
+        app->expand(source, nodes);
+    }
 }
 
-/*
- * Edge id.
- */
-- (NSString*)makeEdgeId:(NSString*)pid to:(NSString *)cid {
-    
-    // theres an edge
-    return [NSString stringWithFormat:@"%@_edge_%@",pid,cid];
-}
-
-/*
- * Connection id.
- */
-- (NSString*)makeConnectionId:(NSString *)sid to:(NSString *)nid {
-    
-    // connect this
-    return [NSString stringWithFormat:@"%@_connection_%@",sid,nid];
-}
 
 #pragma mark - 
 #pragma mark Application

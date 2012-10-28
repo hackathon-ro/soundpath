@@ -159,7 +159,8 @@ void SoundPathApp::touchesBegan( TouchEvent event ) {
             if (node != NULL) {
                 
                 // touch controller
-                NSString *nid = [NSString stringWithCString:node->nid.c_str() encoding:[NSString defaultCStringEncoding]];
+                unsigned int nid = node->nid;
+                
                 
                 // info
                 if (node->action == actionInfo) {
@@ -167,20 +168,8 @@ void SoundPathApp::touchesBegan( TouchEvent event ) {
                     
                     // info
                     [interopDelegate nodeInfo:nid];
-                }
-                // related
-                else if (node->action == actionRelated) {
-                    FLog("action related");
-                    
-                    // related
-                    [interopDelegate nodeRelated:nid];
-                }
-                // close
-                else if (node->action == actionClose) {
-                    FLog("action close");
-                    
-                    // related
-                    [interopDelegate nodeClose:nid];
+                } else {
+                    [interopDelegate nodeTapped:nid];
                 }
                 
                 // reset
@@ -197,7 +186,7 @@ void SoundPathApp::touchesBegan( TouchEvent event ) {
             if (node != NULL) {
                 
                 // tap controller
-                NSString *nid = [NSString stringWithCString:node->nid.c_str() encoding:[NSString defaultCStringEncoding]];
+                unsigned int nid = node->nid;
                 
                 // load
                 if (! node->isActive() && ! node->isLoading()) {
@@ -212,7 +201,7 @@ void SoundPathApp::touchesBegan( TouchEvent event ) {
                 // information
                 else {
                     // node info
-                    [interopDelegate nodeInformation:nid];
+                    [interopDelegate nodeInfo:nid];
                 }
             }
         }
@@ -284,13 +273,13 @@ void SoundPathApp::pinched(UIPinchGestureRecognizer* recognizer) {
 /*
  * Creates a node.
  */
-NodePtr SoundPathApp::createNode(string nid, string type) {
+NodePtr SoundPathApp::createNode(unsigned int nid, string type) {
     GLog();
     
     // graph
     return graph.createNode(nid,type);
 }
-NodePtr SoundPathApp::createNode(string nid, string type, double x, double y) {
+NodePtr SoundPathApp::createNode(unsigned int nid, string type, double x, double y) {
     GLog();
     
     // graph
@@ -300,7 +289,7 @@ NodePtr SoundPathApp::createNode(string nid, string type, double x, double y) {
 /*
  * Gets a node.
  */
-NodePtr SoundPathApp::getNode(string nid) {
+NodePtr SoundPathApp::getNode(unsigned int nid) {
     GLog();
     
     // graph
@@ -310,17 +299,17 @@ NodePtr SoundPathApp::getNode(string nid) {
 /*
  * Creates a connection.
  */
-ConnectionPtr SoundPathApp::createConnection(string cid, string type, NodePtr n1, NodePtr n2) {
+ConnectionPtr SoundPathApp::createConnection(NodePtr n1, NodePtr n2) {
     GLog();
     
     // graph
-    return graph.createConnection(cid,type,n1,n2);
+    return graph.createConnection(n1,n2);
 }
 
 /*
  * Gets a connection.
  */
-ConnectionPtr SoundPathApp::getConnection(string nid1, string nid2) {
+ConnectionPtr SoundPathApp::getConnection(unsigned int nid1, unsigned int nid2) {
     GLog();
     
     // graph
@@ -364,4 +353,14 @@ Vec3d SoundPathApp::nodeCoordinates(NodePtr n) {
     return graph.coordinates(n->pos.x, n->pos.y, n->radius);
 }
 
+
+void SoundPathApp::expand(NodePtr parent, NodeVectorPtr nodes)
+{
+    graph.expand(parent, nodes);
+}
+
+void SoundPathApp::hideSubChildren(NodePtr parent)
+{
+    graph.hideSubChildren(parent);
+}
 CINDER_APP_COCOA_TOUCH( SoundPathApp, RendererGl )

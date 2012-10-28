@@ -39,11 +39,6 @@ typedef boost::shared_ptr<Connection> ConnectionPtr;
 typedef std::vector<ConnectionPtr> ConnectionVectorPtr;
 typedef ConnectionVectorPtr::iterator ConnectionIt;
 
-
-// constants
-const string connectionRelated = "related";	
-
-
 /**
  * Graph Connection.
  */
@@ -54,7 +49,11 @@ class Connection {
     
     // Connection
     Connection();
-    Connection(string idc, NodePtr n1, NodePtr n2); 
+    Connection(NodePtr n1, NodePtr n2);
+    
+    bool isVisible();
+    void hide();
+    void show();
     
     // Cinder
     void config(Configuration c);
@@ -65,16 +64,17 @@ class Connection {
     
     
     // Public Fields
-    string cid;
-    NodeWeakPtr wnode1;
-    NodeWeakPtr wnode2;
-    string type;
+    NodePtr node1;
+    NodePtr node2;
     
+    unsigned int nid1;
+    unsigned int nid2;
     
     // private
     private:
     
     // States
+    bool visible;
     bool selected;
     
     // config
@@ -90,16 +90,4 @@ class Connection {
     float d;
     
 };
-
-class ConnectionRelated: public Connection {
-    
-    // public
-    public:
-    
-    // Connection
-    ConnectionRelated();
-    ConnectionRelated(string idc, NodePtr n1, NodePtr n2);
-};
-
-
 

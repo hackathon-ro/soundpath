@@ -37,8 +37,6 @@ Action::Action() {
     // position
     pos.set(0,0);
     pos_info.set(0,0);
-    pos_related.set(0,0);
-    pos_close.set(0,0);
     asize.set(44,44);
     
     // time
@@ -47,13 +45,9 @@ Action::Action() {
     
     // textures
     textureActionInfo = gl::Texture(1,1);
-    textureActionRelated = gl::Texture(1,1);
-    textureActionClose = gl::Texture(1,1);
     
     // actions
     action_info = false;
-    action_related = false;
-    action_close = false;
     
     // hide
     this->hide();
@@ -151,18 +145,9 @@ void Action::draw() {
         // info
         gl::draw(textureActionInfo, pos+pos_info);
         
-        // related
-        if (action_related) {
-            gl::draw(textureActionRelated, pos+pos_related);
-        }
-        
-        // close
-        gl::draw(textureActionClose, pos+pos_close);
-        
         // reset
         gl::disableAlphaBlending();
     }
-    
 }
 
 
@@ -182,18 +167,6 @@ bool Action::action(Vec2d tpos) {
         // info
         if (action_info && Rectf(pos.x+pos_info.x,pos.y+pos_info.y,pos.x+pos_info.x+asize.x,pos.y+pos_info.y+asize.y).contains(tpos)) {
             act = actionInfo;
-            return true;
-        }
-        
-        // related
-        else if (action_related && Rectf(pos.x+pos_related.x,pos.y+pos_related.y,pos.x+pos_related.x+asize.x,pos.y+pos_related.y+asize.y).contains(tpos)) {
-            act = actionRelated;
-            return true;
-        }
-        
-        // close
-        else if (action_close && Rectf(pos.x+pos_close.x,pos.y+pos_close.y,pos.x+pos_close.x+asize.x,pos.y+pos_close.y+asize.y).contains(tpos)) {
-            act = actionClose;
             return true;
         }
     }
@@ -267,8 +240,6 @@ void Action::deactivate() {
     
     // reset
     action_info = false;
-    action_related = false;
-    action_close = false;
     
     // current
     act = actionNone;
@@ -285,22 +256,16 @@ void Action::assignNode(NodePtr n) {
     
     // position (shift -90°)
     pos_info.set(n->radius * cos(-2.617993878), n->radius * sin(-2.617993878)); // -150°
-    pos_related.set(n->radius * cos(-1.570796327), n->radius * sin(-1.570796327)); // -> -90°
-    pos_close.set(n->radius * cos(-0.523598776), n->radius * sin(-0.523598776)); //  -30°
     
     pos_info -= asize/2.0;
-    pos_related -= asize/2.0;
-    pos_close -= asize/2.0;
     
     // actions
     action_info = true;
-    action_related = true;
-    action_close = true;
     
     // bounds
     bounds.x1 = pos_info.x;
-    bounds.x2 = pos_close.x+asize.x;
-    bounds.y1 = action_related ? pos_related.y : pos_info.y;
+    bounds.x2 = pos_info.x+asize.x;
+    bounds.y1 = pos_info.y;
     bounds.y2 = pos_info.y+asize.y;
 }
 
@@ -316,8 +281,6 @@ void Action::renderAction() {
     
     // textures
     textureActionInfo = gl::Texture(loadImage(loadResource("node_action_info"+sfx)));
-    textureActionRelated = gl::Texture(loadImage(loadResource("node_action_related"+sfx)));
-    textureActionClose = gl::Texture(loadImage(loadResource("node_action_close"+sfx)));
 }
 
 

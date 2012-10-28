@@ -49,15 +49,21 @@ public:
     id<SPInteropDelegate> interopDelegate;
     
     // Business
-    NodePtr createNode(string nid, string type);
-    NodePtr createNode(string nid, string type, double x, double y);
-    NodePtr getNode(string nid);
-    ConnectionPtr createConnection(string cid, string type, NodePtr n1, NodePtr n2);
-    ConnectionPtr getConnection(string nid1, string nid2);
+    NodePtr createNode(unsigned int nid, string type);
+    NodePtr createNode(unsigned int nid, string type, double x, double y);
+    NodePtr getNode(unsigned int nid);
+    ConnectionPtr createConnection(NodePtr n1, NodePtr n2);
+    ConnectionPtr getConnection(unsigned int nid1, unsigned int nid2);
+    
     void load(NodePtr n);
     void unload(NodePtr n);
     void graphShift(double mx, double my);
     Vec3d nodeCoordinates(NodePtr n);
+    
+    
+    
+    void expand(NodePtr parent, NodeVectorPtr nodes);
+    void hideSubChildren(NodePtr parent);
     
     Graph graph;
     
