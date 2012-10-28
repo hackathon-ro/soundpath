@@ -585,7 +585,7 @@ Vec3d Graph::coordinates(double px, double py, double d) {
 /**
  * Creates a node.
  */
-NodePtr Graph::createNode(unsigned int nid, string type) {
+NodePtr Graph::createNode(int nid, string type) {
     GLog();
     
     // scale
@@ -598,7 +598,7 @@ NodePtr Graph::createNode(unsigned int nid, string type) {
     // create
     return createNode(nid,type,np.x,np.y);
 }
-NodePtr Graph::createNode(unsigned int nid, string type, double x, double y) {
+NodePtr Graph::createNode(int nid, string type, double x, double y) {
     GLog();
     
     boost::shared_ptr<Node> node(new Node(nid,x,y));
@@ -611,7 +611,7 @@ NodePtr Graph::createNode(unsigned int nid, string type, double x, double y) {
 /**
  * Gets a node.
  */
-NodePtr Graph::getNode(unsigned int nid) {
+NodePtr Graph::getNode(int nid) {
     GLog();
     
     for (NodeIt node = nodes.begin(); node != nodes.end(); ++node) {
@@ -640,13 +640,13 @@ ConnectionPtr Graph::createConnection(NodePtr n1, NodePtr n2) {
 /**
  * Gets a connection.
  */
-ConnectionPtr Graph::getConnection(unsigned int nid) {
+ConnectionPtr Graph::getConnection(int nid) {
     GLog();
     
     for (ConnectionIt connection = connections.begin(); connection != connections.end(); ++connection) {
         
-        unsigned int cnid1 = (*connection)->nid1;
-        unsigned int cnid2 = (*connection)->nid2;
+        int cnid1 = (*connection)->node1->nid;
+        int cnid2 = (*connection)->node1->nid;
         
         if (cnid1 == nid || cnid2  == nid) {
             return *connection;
@@ -660,13 +660,13 @@ ConnectionPtr Graph::getConnection(unsigned int nid) {
 /**
  * Gets a connection.
  */
-ConnectionPtr Graph::getConnection(unsigned int nid1, unsigned int nid2) {
+ConnectionPtr Graph::getConnection(int nid1, int nid2) {
     GLog();
     
     for (ConnectionIt connection = connections.begin(); connection != connections.end(); ++connection) {
         
-        unsigned int cnid1 = (*connection)->nid1;
-        unsigned int cnid2 = (*connection)->nid2;
+        int cnid1 = (*connection)->node1->nid;
+        int cnid2 = (*connection)->node1->nid;
         
         if ((cnid1 == nid1 && cnid2  == nid2) || (cnid2 == nid1 && cnid1 == nid2)) {
             return *connection;
@@ -681,7 +681,7 @@ ConnectionPtr Graph::getConnection(unsigned int nid1, unsigned int nid2) {
 /**
  * Removes a node.
  */
-void Graph::removeNode(unsigned int nid) {
+void Graph::removeNode(int nid) {
     FLog();
     
     // erase from nodes
@@ -747,7 +747,7 @@ void Graph::hideChildren(NodePtr parent)
     NodeVectorPtr nodes = parent->children;
     
     for (NodeIt node = nodes.begin(); node != nodes.end(); ++node) {
-        unsigned int nid = (*node)->nid;
+        int nid = (*node)->nid;
         
         hideChildren((*node));
         
@@ -841,11 +841,10 @@ void Graph::action(int tid) {
     GLog();
     
     // showtime
-    if (touched[tid]->isActive() && ! touched[tid]->isClosed()) {
+    if ((touched[tid]->isActive() || touched[tid]->isLoading()) && ! touched[tid]->isClosed()) {
         actions[tid].assignNode(touched[tid]);
         actions[tid].show();
     }
-    
 }
 
 

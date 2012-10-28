@@ -86,13 +86,13 @@ class Graph {
     void drag(Vec2d d);
     void shift(Vec2d d);
     Vec3d coordinates(double px, double py, double d);
-    NodePtr createNode(unsigned int nid, string type);
-    NodePtr createNode(unsigned int nid, string type, double x, double y);
-    NodePtr getNode(unsigned int nid);
+    NodePtr createNode(int nid, string type);
+    NodePtr createNode(int nid, string type, double x, double y);
+    NodePtr getNode(int nid);
     ConnectionPtr createConnection(NodePtr n1, NodePtr n2);
-    ConnectionPtr getConnection(unsigned int nid1, unsigned int nid2);
-    ConnectionPtr getConnection(unsigned int nid);
-    void removeNode(unsigned int nid);
+    ConnectionPtr getConnection(int nid1, int nid2);
+    ConnectionPtr getConnection(int nid);
+    void removeNode(int nid);
     void load(NodePtr n);
     void unload(NodePtr n);
     bool onStage(NodePtr n);
@@ -102,7 +102,7 @@ class Graph {
     void expand(NodePtr parent, NodeVectorPtr nodes);
     void hideChildren(NodePtr parent);
     void hideSubChildren(NodePtr parent);
-    void hideConnections(unsigned int nid);
+    void hideConnections(int nid);
     
     // private
     private:

@@ -69,7 +69,7 @@ class Node {
     
     // Node
     Node();
-    Node(unsigned int idn, double x, double y);
+    Node(int idn, double x, double y);
     
     // Cinder
     void config(Configuration c);
@@ -121,7 +121,7 @@ class Node {
     void removeChild(NodePtr child);
     
     // Public Fields
-    unsigned int nid;
+    int nid;
     string label;
     string meta;
     string type;

@@ -67,9 +67,6 @@ class Connection {
     NodePtr node1;
     NodePtr node2;
     
-    unsigned int nid1;
-    unsigned int nid2;
-    
     // private
     private:
     

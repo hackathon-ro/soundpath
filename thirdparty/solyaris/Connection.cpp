@@ -41,9 +41,6 @@ Connection::Connection(NodePtr n1, NodePtr n2) {
     node1 = n1;
     node2 = n2;
     
-    nid1 = n1->nid;
-    nid2 = n2->nid;
-    
     // state
     selected = false;
     
