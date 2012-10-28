@@ -97,13 +97,6 @@ void Connection::config(Configuration c) {
     
 }
 
-/**
- * Applies the settings.
- */
-void Connection::defaults(Defaults d) {
-}
-
-
 #pragma mark -
 #pragma mark Sketch
 

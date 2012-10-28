@@ -35,7 +35,6 @@
 		B30CB1EC163C494300A25046 /* Action.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B30CB1D9163C494300A25046 /* Action.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		B30CB1ED163C494300A25046 /* Configuration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B30CB1DB163C494300A25046 /* Configuration.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		B30CB1EE163C494300A25046 /* Connection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B30CB1DD163C494300A25046 /* Connection.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		B30CB1EF163C494300A25046 /* Defaults.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B30CB1DF163C494300A25046 /* Defaults.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		B30CB1F1163C494300A25046 /* Graph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B30CB1E3163C494300A25046 /* Graph.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		B30CB1F3163C494300A25046 /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B30CB1E7163C494300A25046 /* Node.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		B30CB236163C499700A25046 /* bg_graph.png in Resources */ = {isa = PBXBuildFile; fileRef = B30CB1FA163C499700A25046 /* bg_graph.png */; };
@@ -63,6 +62,7 @@
 		B3A53FFD163C857F00B87083 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67ECF436163C5B5900CA4A49 /* AddressBook.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		B3A53FFE163C858200B87083 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67ECF437163C5B5900CA4A49 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		B3A54015163C90E600B87083 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3A54013163C90DB00B87083 /* SystemConfiguration.framework */; };
+		B3A54067163CAC6C00B87083 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3A54066163CAC6B00B87083 /* MobileCoreServices.framework */; };
 		C725DFFE121DAC7F00FA186B /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C727C02B121B400300192073 /* CoreMedia.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C725E001121DAC8F00FA186B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C725E000121DAC8F00FA186B /* AVFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C727C02E121B400300192073 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C727C02D121B400300192073 /* CoreVideo.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -143,8 +143,6 @@
 		B30CB1DC163C494300A25046 /* Configuration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Configuration.h; sourceTree = "<group>"; };
 		B30CB1DD163C494300A25046 /* Connection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Connection.cpp; sourceTree = "<group>"; };
 		B30CB1DE163C494300A25046 /* Connection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Connection.h; sourceTree = "<group>"; };
-		B30CB1DF163C494300A25046 /* Defaults.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Defaults.cpp; sourceTree = "<group>"; };
-		B30CB1E0163C494300A25046 /* Defaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Defaults.h; sourceTree = "<group>"; };
 		B30CB1E3163C494300A25046 /* Graph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Graph.cpp; sourceTree = "<group>"; };
 		B30CB1E4163C494300A25046 /* Graph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Graph.h; sourceTree = "<group>"; };
 		B30CB1E7163C494300A25046 /* Node.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Node.cpp; sourceTree = "<group>"; };
@@ -177,6 +175,7 @@
 		B39F3782163BFDF2008E419D /* MainViewController-iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MainViewController-iPad.xib"; sourceTree = "<group>"; };
 		B39F3783163BFDF2008E419D /* MainViewController-iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MainViewController-iPhone.xib"; sourceTree = "<group>"; };
 		B3A54013163C90DB00B87083 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		B3A54066163CAC6B00B87083 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		C725E000121DAC8F00FA186B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		C727C02B121B400300192073 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		C727C02D121B400300192073 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
@@ -187,6 +186,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3A54067163CAC6C00B87083 /* MobileCoreServices.framework in Frameworks */,
 				67ECF43E163C5CBD00CA4A49 /* libfacebook_ios_sdk.a in Frameworks */,
 				B3A54015163C90E600B87083 /* SystemConfiguration.framework in Frameworks */,
 				B3A53FFB163C857800B87083 /* Accounts.framework in Frameworks */,
@@ -269,6 +269,7 @@
 				67ECF427163C5B3700CA4A49 /* facebook-ios-sdk.xcodeproj */,
 				00EB543E13E25352006BF8E7 /* CoreText.framework */,
 				00EB544013E25367006BF8E7 /* libz.dylib */,
+				B3A54066163CAC6B00B87083 /* MobileCoreServices.framework */,
 				B3A54013163C90DB00B87083 /* SystemConfiguration.framework */,
 				670BC21D163C6C46001297F8 /* Accounts.framework */,
 				67ECF43A163C5B9C00CA4A49 /* Social.framework */,
@@ -341,8 +342,6 @@
 				B30CB1DC163C494300A25046 /* Configuration.h */,
 				B30CB1DD163C494300A25046 /* Connection.cpp */,
 				B30CB1DE163C494300A25046 /* Connection.h */,
-				B30CB1DF163C494300A25046 /* Defaults.cpp */,
-				B30CB1E0163C494300A25046 /* Defaults.h */,
 				B30CB1E3163C494300A25046 /* Graph.cpp */,
 				B30CB1E4163C494300A25046 /* Graph.h */,
 				B30CB1E7163C494300A25046 /* Node.cpp */,
@@ -539,7 +538,6 @@
 				B30CB1EC163C494300A25046 /* Action.cpp in Sources */,
 				B30CB1ED163C494300A25046 /* Configuration.cpp in Sources */,
 				B30CB1EE163C494300A25046 /* Connection.cpp in Sources */,
-				B30CB1EF163C494300A25046 /* Defaults.cpp in Sources */,
 				B30CB1F1163C494300A25046 /* Graph.cpp in Sources */,
 				B30CB1F3163C494300A25046 /* Node.cpp in Sources */,
 				67ECF442163C606D00CA4A49 /* LoginViewController.mm in Sources */,

@@ -32,7 +32,6 @@
 #include "Connection.h"
 #include "Action.h"
 #include "Configuration.h"
-#include "Defaults.h"
 #include "Resources.h"
 #include <vector>
 #include <map>
@@ -60,7 +59,6 @@ class Graph {
     // Cinder
     void resize(int w, int h, int o);
     void config(Configuration c);
-    void defaults(Defaults d);
     void setBackground(string bg);
     
     
@@ -84,7 +82,6 @@ class Graph {
     // Business
     void attract();
     void repulse();
-    void subnodes();
     void move(Vec2d d);
     void drag(Vec2d d);
     void shift(Vec2d d);
@@ -116,7 +113,6 @@ class Graph {
     float speed;
     float friction;
     float harea;
-    bool layout_nodes, layout_subnodes;
     
     // background
     gl::Texture bg_portrait, bg_landscape;
@@ -158,7 +154,6 @@ class Graph {
     
     // configuration & settings
     Configuration conf;
-    Defaults dflts;
     
     // samples
     audio::SourceRef audioSampleClick;

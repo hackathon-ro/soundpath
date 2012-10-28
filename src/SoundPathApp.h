@@ -31,7 +31,6 @@ public:
     void prepareSettings(Settings *settings);
 	void setup();
     void applyDeviceOrientation(int dorientation);
-    void applySettings();
     
     
     // Sketch

@@ -56,7 +56,6 @@ void SoundPathApp::setup() {
     
     // app
     this->applyDeviceOrientation(UIDeviceOrientationPortrait);
-    this->applySettings();
     
     // configuration
     Configuration conf = Configuration();
@@ -94,38 +93,6 @@ void SoundPathApp::applyDeviceOrientation(int dorientation) {
         this->setWindowSize(dwidth, dheight);
         graph.resize(dwidth,dheight,orientation);
     }
-}
-
-/**
- * Applies the user defaults.
- */
-void SoundPathApp::applySettings() {
-    GLog();
-    
-    // user defaults
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	
-	// defaults
-    Defaults defaults = Defaults();
-    
-    // user defaults
-	NSArray *keys = [[userDefaults dictionaryRepresentation] allKeys];
-    for (NSString *key in keys) {
-        NSObject *def = [userDefaults objectForKey:key];
-        
-        // string
-        if ([def isKindOfClass:[NSString class]]) {
-            
-            // match
-            NSRange range = [key rangeOfString : @"graph_"];
-            if (range.location != NSNotFound) {
-                defaults.setDefault([key UTF8String], [(NSString*)def UTF8String]);
-            }
-        }
-    }
-    
-    // apply to graph
-    graph.defaults(defaults);
 }
 
 #pragma mark -

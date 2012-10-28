@@ -23,7 +23,6 @@
 #pragma once
 #include "Node.h"
 #include "Configuration.h"
-#include "Defaults.h"
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/shared_ptr.hpp>
 
@@ -59,7 +58,6 @@ class Connection {
     
     // Cinder
     void config(Configuration c);
-    void defaults(Defaults s);
     
     // Sketch
     void update();

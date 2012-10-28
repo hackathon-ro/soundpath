@@ -35,7 +35,6 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include "Configuration.h"
-#include "Defaults.h"
 
 
 
@@ -80,7 +79,6 @@ class Node {
     
     // Cinder
     void config(Configuration c);
-    void defaults(Defaults d);
     
     // Sketch
     void update();
@@ -96,7 +94,6 @@ class Node {
     void move(double dx, double dy);
     void move(Vec2d d);
     void translate(Vec2d d);
-    void addChild(NodePtr child);
     void grown();
     void shrinked();
     void load();
@@ -105,12 +102,8 @@ class Node {
     void close();
     void open();
     void hide();
-    void fold();
-    void unfold();
     void born();
-    bool isNodeChild(NodePtr p);
     void show(bool animate);
-    void cposition(NodeVectorPtr cnodes);
     void touched();
     void untouched();
     void tapped();
@@ -136,7 +129,6 @@ class Node {
     string action;
     NodeWeakPtr sref;
     NodeWeakPtr parent;
-    NodeVectorPtr children;
     Vec2d pos;
     Vec2d ppos;
     Vec2d mpos;

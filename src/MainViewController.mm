@@ -117,6 +117,8 @@
         source->load();
     }
     
+    source->loaded();
+    
     source->numConnections = 5;
     
     for(int i=1; i<5; i++)

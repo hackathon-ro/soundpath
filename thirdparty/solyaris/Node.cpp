@@ -110,7 +110,10 @@ Node::Node(string idn, double x, double y) {
     font = Font("Helvetica",12);
     textureLabel = gl::Texture(1,1);
     loff.set(0,5);
-
+    
+    
+    // children
+    initial = redux ? 5 : 8;
 }
 
 /**
@@ -153,6 +156,15 @@ void Node::config(Configuration c) {
         maxr *= 0.75;
     }
     
+    // distance
+    double length = redux ? 300 : 480;
+    
+    // props
+    dist = length*1.11;
+    perimeter = length*0.9;
+    zone = length / 9.0;
+    
+    
     // init retina
     if (retina) {
         
@@ -169,44 +181,12 @@ void Node::config(Configuration c) {
         // fonts
         font = Font("Helvetica",24);
         loff *= 2;
-    }
-}
-
-
-/**
- * Applies the defaults.
- */
-void Node::defaults(Defaults d) {
-    
-    // children
-    initial = redux ? 5 : 8;
-    Default graphNodeInitial = d.getDefault(dGraphNodeInitial);
-    if (graphNodeInitial.isSet()) {
-        initial = (int) graphNodeInitial.doubleVal();
-    }
-    
-    
-    // distance
-    double length = redux ? 300 : 480;
-    Default graphEdgeLength = d.getDefault(dGraphEdgeLength);
-    if (graphEdgeLength.isSet()) {
-        length = graphEdgeLength.doubleVal();
-    }
-    
-    // props
-    dist = length*1.11;
-    perimeter = length*0.9;
-    zone = length / 9.0;
-    
-    // scale retina
-    if (retina) {
+        
         dist *= 2;
         perimeter *= 2;
         zone *= 2;
     }
-
 }
-
 
 #pragma mark -
 #pragma mark Sketch
@@ -434,17 +414,6 @@ void Node::translate(Vec2d d) {
     mpos += d;
 }
 
-
-/**
-* Adds a child.
-*/
-void Node::addChild(NodePtr child) {
-    GLog();
-    
-    // push
-    children.push_back(child);
-}
-
 /**
  * Node is grown.
  */
@@ -464,11 +433,6 @@ void Node::grown() {
         // born
         this->born();
     }
-    else {
-        
-        // unfold
-        this->unfold();
-    }
 
       
 }
@@ -485,9 +449,6 @@ void Node::shrinked() {
     // mass
     mass = calcmass();
     
-    // fold
-    this->fold();
-    
 }
 
 
@@ -501,63 +462,6 @@ void Node::born() {
     active = true;
     closed = false;
 }
-
-/**
- * Unfold.
- */
-void Node::unfold() {
-    FLog();
-    
-    // children
-    NodeVectorPtr cnodes;
-    for (NodeIt child = children.begin(); child != children.end(); ++child) {
-        
-        // open child
-        if (this->isNodeChild(*child)) {
-            
-            // radius & position
-            float rx = Rand::randFloat(radius * nodeUnfoldMin,radius * nodeUnfoldMax) + 0.1;
-            rx *= (Rand::randFloat(1) > 0.5) ? 1.0 : -1.0;
-            float ry = Rand::randFloat(radius * nodeUnfoldMin,radius * nodeUnfoldMax) + 0.1;
-            ry *= (Rand::randFloat(1) > 0.5) ? 1.0 : -1.0;
-            
-            // open & push
-            (*child)->open();
-            cnodes.push_back(*child);
-        }
-        
-    }
-    
-    // position children
-    this->cposition(cnodes);
-    
-}
-
-/**
- * Fold.
- */
-void Node::fold() {
-    FLog();
-    
-    // children
-    NodeVectorPtr cnodes;
-    for (NodeIt child = children.begin(); child != children.end(); ++child) {
-        
-        // move it
-        if (this->isNodeChild(*child)) {
-            
-            // push
-            cnodes.push_back(*child);
-            
-        }
-    }
-    
-    // position children
-    this->cposition(cnodes);
-
-}
-
-
 
 /**
  * Load noad.
@@ -617,7 +521,7 @@ void Node::loaded() {
     FLog();
 
     // state
-    growr = ((int)children.size()) > 1 ? min(minr+(int)children.size(),maxr) : minr * 0.75;
+    growr = minr * 0.75;
     grow = true;
   
 }
@@ -638,15 +542,6 @@ void Node::close() {
         shrinkr = minr * 0.5;
         shrink = true;
         
-        // children
-        for (NodeIt child = children.begin(); child != children.end(); ++child) {
-            
-            // close child
-            if (this->isNodeChild(*child)) {
-                (*child)->close();
-            }
-            
-        }
     }
     
 }
@@ -665,7 +560,7 @@ void Node::open() {
     if (active) {
         
         // state
-        growr = ((int)children.size()) > 1 ? min(minr+(int)children.size(),maxr) : minr * 0.75;
+        growr = minr * 0.75;
         grow = true;
         
     }
@@ -721,61 +616,6 @@ void Node::hide() {
     visible = false;
     
 }
-
-
-/**
- * Positions the children.
- */
-void Node::cposition(NodeVectorPtr cnodes) {
-    GLog();
-    
-    // randomize
-    Rand::randomize();
-    
-    // number
-    float cnb = cnodes.size();
-    
-    // radius
-    float rmin = closed ? radius * 0.25 : radius * nodeUnfoldMin * 0.75;
-    float rmax = radius * nodeUnfoldMax * 0.75;
-    
-    // angle
-    float a = 360.0/cnb; 
-    float ca = Rand::randFloat(-130.0,-110.0);
-    
-    // child nodes
-    for (NodeIt cnode = cnodes.begin(); cnode != cnodes.end(); ++cnode) {
-        
-        // randomize radius / angle
-        float rr = Rand::randFloat(rmin,rmax) + 0.1;
-        float ra = Rand::randFloat(ca-a/2.0,ca+a/2.0);
-        
-        // position
-        Vec2d p = Vec2d(pos.x+(rr * cos(ra * M_PI / 180.0)),pos.y+(rr * sin(ra * M_PI / 180.0)));
-        
-        // move
-        (*cnode)->moveTo(p);
-        
-        // angle
-        ca += a;
-    }
-    
-}
-
-
-/**
- * Child.
- */
-bool Node::isNodeChild(NodePtr n) {
-    
-    // parent
-    NodePtr cp = n->parent.lock();
-    
-    // active
-    bool available = ! (n->isActive() || n->isLoading()) && n->isVisible();
-    return available && cp->nid == this->nid;
-}
-
 
 /**
  * Touched.

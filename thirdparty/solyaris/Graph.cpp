@@ -66,10 +66,6 @@ Graph::Graph(int w, int h, int o) {
         actions[t] = Action();
     }
     
-    // layout
-    layout_nodes = true;
-    layout_subnodes = true;
-    
     // zoom
     scale = 1.0;
     translate.set(0,0);
@@ -185,42 +181,6 @@ void Graph::setBackground(string bg)
     bg_landscape = gl::Texture(surface_landscape);
 }
 
-
-/**
- * Applies the settings.
- */
-void Graph::defaults(Defaults d) {
-    
-    // reference
-    dflts = d;
-    
-    // layout nodes
-    layout_nodes = true;
-    Default graphLayoutNodes = d.getDefault(dGraphLayoutNodesDisabled);
-    if (graphLayoutNodes.isSet()) {
-        layout_nodes = ! graphLayoutNodes.boolVal();
-    }
-    
-    // layout subnodes
-    layout_subnodes = true;
-    Default graphLayoutSubnodes = d.getDefault(dGraphLayoutSubnodesDisabled);
-    if (graphLayoutSubnodes.isSet()) {
-        layout_subnodes = ! graphLayoutSubnodes.boolVal();
-    }
-    
-    
-    // apply to nodes
-    for (NodeIt node = nodes.begin(); node != nodes.end(); ++node) {
-        (*node)->defaults(dflts);
-    }
-    
-    // apply to connections
-    for (ConnectionIt connection = connections.begin(); connection != connections.end(); ++connection) {
-        (*connection)->defaults(dflts);
-    }
-    
-}
-
 #pragma mark -
 #pragma mark Sketch
 
@@ -233,22 +193,6 @@ void Graph::update() {
 
     // randomize
     Rand::randomize();
-    
-    // layout nodes
-    if (layout_nodes) {
-        
-        // attract
-        this->attract();
-        
-        // repulse
-        this->repulse();
-        
-    }
-    
-    // layout subnodes
-    if (layout_subnodes && ci::app::getElapsedFrames() % 6 == 0) {
-        this->subnodes();
-    }
     
     // virtual position
     Vec2d dd = vmpos - vpos;
@@ -275,28 +219,6 @@ void Graph::update() {
             
             // update
             (*node)->update();
-            
-            // node movement
-            Vec2d ndist = (*node)->mpos - (*node)->pos;
-            float nmov = (ndist.length() > 1) ? ndist.length() * 0.0045 : 0;
-
-            // children
-            for (NodeIt child = (*node)->children.begin(); child != (*node)->children.end(); ++child) {
-
-                // move children
-                if ((*node)->isNodeChild(*child)) {
-                    
-                    // follow
-                    (*child)->translate((*node)->pos - (*node)->ppos);
-                    
-                    // randomize
-                    (*child)->move(Rand::randFloat(-1,1)*nmov,Rand::randFloat(-1,1)*nmov);
-                    
-                    // update
-                    (*child)->update();
-                }
-                
-            }
 
         }
         
@@ -607,55 +529,6 @@ void Graph::repulse() {
 
 
 /**
- * Subnodes.
- */
-void Graph::subnodes() {
-    
-    // nodes
-    for (NodeIt node = nodes.begin(); node != nodes.end(); ++node) {
-        
-        // active node on stage
-        if ((*node)->isActive() && ! (*node)->isClosed() && ! (*node)->isLoading() && this->onStage(*node)) {
-            
-            // sphere
-            float smin = (*node)->radius * nodeUnfoldMin;
-            float smax = (*node)->radius * nodeUnfoldMax;
-            
-            // children
-            for (NodeIt c1 = (*node)->children.begin(); c1 != (*node)->children.end(); ++c1) {
-                
-                // child
-                if ((*node)->isNodeChild(*c1) && ! (*c1)->isSelected()) {
-                    
-                    // distract siblings
-                    for (NodeIt c2 = (*node)->children.begin(); c2 != (*node)->children.end(); ++c2) {
-                        if ((*node)->isNodeChild(*c2) && ! (*c2)->isSelected() && (*c1) != (*c2)) {
-                            (*c1)->distract(*c2);
-                        }
-                    }
-                    
-                    // sphere repulsion
-                    float dist = (*node)->pos.distance((*c1)->pos);
-                    if (dist < smin) {
-                        (*c1)->repulse((*node)->pos, smin, 1);
-                    }
-                    else if (dist > smax) {
-                        (*c1)->repulse((*node)->pos, smax, -1);
-                    }
-
-                }
-                
-            }
-            
-        }
-        
-
-    }
-    
-}
-
-
-/**
  * Move.
  */
 void Graph::move(Vec2d d) {
@@ -737,7 +610,6 @@ NodePtr Graph::createNode(string nid, string type, double x, double y) {
     boost::shared_ptr<NodeArtist> node(new NodeArtist(nid,x,y));
     node->sref = node;
     node->config(conf);
-    node->defaults(dflts);
     nodes.push_back(node);
     return node;
 }
@@ -771,14 +643,12 @@ ConnectionPtr Graph::createConnection(string cid, string type, NodePtr n1, NodeP
     if (type == connectionRelated) {
         boost::shared_ptr<Connection> connection(new ConnectionRelated(cid,n1,n2));
         connection->config(conf);
-        connection->defaults(dflts);
         connections.push_back(connection);
         return connection;
     }
     else {
         boost::shared_ptr<Connection> connection(new Connection(cid,n1,n2));
         connection->config(conf);
-        connection->defaults(dflts);
         connections.push_back(connection);
         return connection;
     }
