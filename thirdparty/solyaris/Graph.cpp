@@ -66,10 +66,6 @@ Graph::Graph(int w, int h, int o) {
         actions[t] = Action();
     }
     
-    // layout
-    layout_nodes = true;
-    layout_subnodes = true;
-    
     // zoom
     scale = 1.0;
     translate.set(0,0);
@@ -185,42 +181,6 @@ void Graph::setBackground(string bg)
     bg_landscape = gl::Texture(surface_landscape);
 }
 
-
-/**
- * Applies the settings.
- */
-void Graph::defaults(Defaults d) {
-    
-    // reference
-    dflts = d;
-    
-    // layout nodes
-    layout_nodes = true;
-    Default graphLayoutNodes = d.getDefault(dGraphLayoutNodesDisabled);
-    if (graphLayoutNodes.isSet()) {
-        layout_nodes = ! graphLayoutNodes.boolVal();
-    }
-    
-    // layout subnodes
-    layout_subnodes = true;
-    Default graphLayoutSubnodes = d.getDefault(dGraphLayoutSubnodesDisabled);
-    if (graphLayoutSubnodes.isSet()) {
-        layout_subnodes = ! graphLayoutSubnodes.boolVal();
-    }
-    
-    
-    // apply to nodes
-    for (NodeIt node = nodes.begin(); node != nodes.end(); ++node) {
-        (*node)->defaults(dflts);
-    }
-    
-    // apply to connections
-    for (ConnectionIt connection = connections.begin(); connection != connections.end(); ++connection) {
-        (*connection)->defaults(dflts);
-    }
-    
-}
-
 #pragma mark -
 #pragma mark Sketch
 
@@ -233,22 +193,6 @@ void Graph::update() {
 
     // randomize
     Rand::randomize();
-    
-    // layout nodes
-    if (layout_nodes) {
-        
-        // attract
-        this->attract();
-        
-        // repulse
-        this->repulse();
-        
-    }
-    
-    // layout subnodes
-    if (layout_subnodes && ci::app::getElapsedFrames() % 6 == 0) {
-        this->subnodes();
-    }
     
     // virtual position
     Vec2d dd = vmpos - vpos;
@@ -275,28 +219,6 @@ void Graph::update() {
             
             // update
             (*node)->update();
-            
-            // node movement
-            Vec2d ndist = (*node)->mpos - (*node)->pos;
-            float nmov = (ndist.length() > 1) ? ndist.length() * 0.0045 : 0;
-
-            // children
-            for (NodeIt child = (*node)->children.begin(); child != (*node)->children.end(); ++child) {
-
-                // move children
-                if ((*node)->isNodeChild(*child)) {
-                    
-                    // follow
-                    (*child)->translate((*node)->pos - (*node)->ppos);
-                    
-                    // randomize
-                    (*child)->move(Rand::randFloat(-1,1)*nmov,Rand::randFloat(-1,1)*nmov);
-                    
-                    // update
-                    (*child)->update();
-                }
-                
-            }
 
         }
         
@@ -304,9 +226,10 @@ void Graph::update() {
     
     // connections
     for (ConnectionIt connection = connections.begin(); connection != connections.end(); ++connection) {
-        
-        // update
-        (*connection)->update();
+        if ((*connection)->isVisible()) {
+            // update
+            (*connection)->update();
+        }
     }
     
     // actions
@@ -332,10 +255,12 @@ void Graph::draw() {
     gl::scale(Vec2d(scale,scale));
     
     // connections
-    for (ConnectionIt connection = connections.begin(); connection != connections.end(); ++connection) {
+    for (ConnectionIt connection = connections.begin(); connection != connections.end(); ++connection) {;
         
-        // draw
-        (*connection)->draw();
+        if ((*connection)->isVisible()) {
+            // draw
+            (*connection)->draw();
+        }
     }
     
     // nodes
@@ -366,12 +291,7 @@ void Graph::reset() {
     
     // clear
     connections.clear();
-    nodes.clear(); 
-    
-    // reset maps
-    nmap.clear();
-    emap.clear();
-    cmap.clear();
+    nodes.clear();
     
     // zoom
     scale = 1.0;
@@ -440,8 +360,7 @@ NodePtr Graph::touchBegan(Vec2d tpos, int tid) {
                 this->sample(sampleClick);
                 
                 // have a break
-                break;
-                
+                return *node;
             }
         }
     }
@@ -607,55 +526,6 @@ void Graph::repulse() {
 
 
 /**
- * Subnodes.
- */
-void Graph::subnodes() {
-    
-    // nodes
-    for (NodeIt node = nodes.begin(); node != nodes.end(); ++node) {
-        
-        // active node on stage
-        if ((*node)->isActive() && ! (*node)->isClosed() && ! (*node)->isLoading() && this->onStage(*node)) {
-            
-            // sphere
-            float smin = (*node)->radius * nodeUnfoldMin;
-            float smax = (*node)->radius * nodeUnfoldMax;
-            
-            // children
-            for (NodeIt c1 = (*node)->children.begin(); c1 != (*node)->children.end(); ++c1) {
-                
-                // child
-                if ((*node)->isNodeChild(*c1) && ! (*c1)->isSelected()) {
-                    
-                    // distract siblings
-                    for (NodeIt c2 = (*node)->children.begin(); c2 != (*node)->children.end(); ++c2) {
-                        if ((*node)->isNodeChild(*c2) && ! (*c2)->isSelected() && (*c1) != (*c2)) {
-                            (*c1)->distract(*c2);
-                        }
-                    }
-                    
-                    // sphere repulsion
-                    float dist = (*node)->pos.distance((*c1)->pos);
-                    if (dist < smin) {
-                        (*c1)->repulse((*node)->pos, smin, 1);
-                    }
-                    else if (dist > smax) {
-                        (*c1)->repulse((*node)->pos, smax, -1);
-                    }
-
-                }
-                
-            }
-            
-        }
-        
-
-    }
-    
-}
-
-
-/**
  * Move.
  */
 void Graph::move(Vec2d d) {
@@ -715,7 +585,7 @@ Vec3d Graph::coordinates(double px, double py, double d) {
 /**
  * Creates a node.
  */
-NodePtr Graph::createNode(string nid, string type) {
+NodePtr Graph::createNode(unsigned int nid, string type) {
     GLog();
     
     // scale
@@ -723,24 +593,17 @@ NodePtr Graph::createNode(string nid, string type) {
     
     // position
     int b = 150*sf;
-    Vec2d np = Vec2d( ((width*sf/2.0)-b + arc4random() % (2*b)), ((height*sf/2.0)-b + arc4random() % (2*b)) );
-    
-    // rezoom
-    np -= translate*(1.0/scale);
+    Vec2d np = Vec2d( b, (height*sf/2.0) );
     
     // create
     return createNode(nid,type,np.x,np.y);
 }
-NodePtr Graph::createNode(string nid, string type, double x, double y) {
+NodePtr Graph::createNode(unsigned int nid, string type, double x, double y) {
     GLog();
     
-    // node map
-    nmap.insert(make_pair(nid, nodes.size()));
-    
-    boost::shared_ptr<NodeArtist> node(new NodeArtist(nid,x,y));
+    boost::shared_ptr<Node> node(new Node(nid,x,y));
     node->sref = node;
     node->config(conf);
-    node->defaults(dflts);
     nodes.push_back(node);
     return node;
 }
@@ -748,13 +611,13 @@ NodePtr Graph::createNode(string nid, string type, double x, double y) {
 /**
  * Gets a node.
  */
-NodePtr Graph::getNode(string nid) {
+NodePtr Graph::getNode(unsigned int nid) {
     GLog();
     
-    // find the key
-    map<string,int>::iterator it = nmap.find(nid);
-    if(it != nmap.end()) {
-        return NodePtr(nodes.at(it->second));
+    for (NodeIt node = nodes.begin(); node != nodes.end(); ++node) {
+        if ((*node)->nid == nid) {
+            return *node;
+        }
     }
     
     // nop
@@ -764,44 +627,50 @@ NodePtr Graph::getNode(string nid) {
 /**
  * Creates a connection.
  */
-ConnectionPtr Graph::createConnection(string cid, string type, NodePtr n1, NodePtr n2) {
+ConnectionPtr Graph::createConnection(NodePtr n1, NodePtr n2) {
     GLog();
     
-    // connection map
-    cmap.insert(make_pair(cid, connections.size()));
-    
-    // type
-    if (type == connectionRelated) {
-        boost::shared_ptr<Connection> connection(new ConnectionRelated(cid,n1,n2));
-        connection->config(conf);
-        connection->defaults(dflts);
-        connections.push_back(connection);
-        return connection;
-    }
-    else {
-        boost::shared_ptr<Connection> connection(new Connection(cid,n1,n2));
-        connection->config(conf);
-        connection->defaults(dflts);
-        connections.push_back(connection);
-        return connection;
-    }
+    boost::shared_ptr<Connection> connection(new Connection(n1,n2));
+    connection->config(conf);
+    connections.push_back(connection);
+    return connection;
     
 }
 
 /**
  * Gets a connection.
  */
-ConnectionPtr Graph::getConnection(string nid1, string nid2) {
+ConnectionPtr Graph::getConnection(unsigned int nid) {
     GLog();
     
-    // find the key
-    map<string,int>::iterator it1 = cmap.find(nid1 + "_connection_" + nid2);
-    if(it1 != cmap.end()) {
-        return ConnectionPtr(connections.at(it1->second));
+    for (ConnectionIt connection = connections.begin(); connection != connections.end(); ++connection) {
+        
+        unsigned int cnid1 = (*connection)->nid1;
+        unsigned int cnid2 = (*connection)->nid2;
+        
+        if (cnid1 == nid || cnid2  == nid) {
+            return *connection;
+        }
     }
-    map<string,int>::iterator it2 = cmap.find(nid2 + "_connection_" + nid1);
-    if(it2 != cmap.end()) {
-        return ConnectionPtr(connections.at(it2->second));
+    
+    // no connection
+    return ConnectionPtr();
+}
+
+/**
+ * Gets a connection.
+ */
+ConnectionPtr Graph::getConnection(unsigned int nid1, unsigned int nid2) {
+    GLog();
+    
+    for (ConnectionIt connection = connections.begin(); connection != connections.end(); ++connection) {
+        
+        unsigned int cnid1 = (*connection)->nid1;
+        unsigned int cnid2 = (*connection)->nid2;
+        
+        if (cnid1 == nid1 || cnid1  == nid2 || cnid2 == nid1 || cnid2 == nid2) {
+            return *connection;
+        }
     }
     
     // no connection
@@ -812,7 +681,7 @@ ConnectionPtr Graph::getConnection(string nid1, string nid2) {
 /**
  * Removes a node.
  */
-void Graph::removeNode(string nid) {
+void Graph::removeNode(unsigned int nid) {
     FLog();
     
     // erase from nodes
@@ -827,14 +696,80 @@ void Graph::removeNode(string nid) {
     if (eraser >= 0) {
         nodes.erase(nodes.begin()+eraser); 
     }
+}
+
+
+/**
+ * Spawn subnodes
+ */
+
+void Graph::expand(NodePtr parent, NodeVectorPtr nodes)
+{
+        
+        parent->setChildren(nodes);
+        
+        unsigned int nCount = nodes.size();
+        
+        int index = 0;
+        for (NodeIt node = nodes.begin(); node != nodes.end(); ++node) {
+            ConnectionPtr connection = getConnection(parent->nid, (*node)->nid);
+            
+            if (connection == NULL) {
+                connection = createConnection(parent,*node);
+            }
+            connection->show();
+            
+            float yDistrib = nCount * (parent->radius*3.0 + 0.1);
+
+            float rx = (parent->radius + 0.1)*nCount;
+            float ry = (parent->radius*3.0 + 0.1)*index - yDistrib/2.0;
+            
+            Vec2d finalPos = Vec2d(parent->pos.x+rx,parent->pos.y+ry);
+
+            // set parent position
+            (*node)->pos.set(Vec2d(parent->pos.x,parent->pos.y));
+
+            // distance
+            Vec2d cdist =  finalPos - parent->pos;
+            
+            (*node)->show(TRUE);
+            
+            // move
+            (*node)->moveTo(parent->pos+cdist);
+        
+            
+            index++;
+        }
+}
+
+void Graph::hideChildren(NodePtr parent)
+{
+    NodeVectorPtr nodes = parent->children;
     
-    // erase from map
-    map<string,int>::iterator it = nmap.find(nid);
-    if(it != nmap.end()) {
-        nmap.erase(it);
+    for (NodeIt node = nodes.begin(); node != nodes.end(); ++node) {
+        unsigned int nid = (*node)->nid;
+        
+        hideChildren((*node));
+        
+        ConnectionPtr connection = getConnection(nid);
+        
+        if(connection != NULL)
+        {
+            connection->hide();
+        }
+        
+        (*node)->hide();
     }
 }
 
+
+void Graph::hideSubChildren(NodePtr parent)
+{
+    NodeVectorPtr nodes = parent->children;
+    for (NodeIt node = nodes.begin(); node != nodes.end(); ++node) {
+        hideChildren(*node);
+    }
+}
 
 /**
  * Prepares the graph for loading.

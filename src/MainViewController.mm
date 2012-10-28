@@ -122,17 +122,23 @@
     
     app = (SoundPathApp*)cinder::app::AppCocoaTouch::get();
     app->interopDelegate = self;
-    
-       
-
+    app->initMe();
 }
 
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self populate];
+
     
-   
+    // test load of root
+    NSArray *nids = [NSArray arrayWithObjects:[NSNumber numberWithInt:1],
+                     [NSNumber numberWithInt:2],
+                     [NSNumber numberWithInt:3],
+                     [NSNumber numberWithInt:4],
+                     [NSNumber numberWithInt:5], nil];
+    
+    app->loaded(0, nids);
+    
 }
 
 - (void) viewDidDisappear:(BOOL)animated
@@ -140,159 +146,22 @@
     [super viewDidDisappear:animated];
 }
 
-#pragma mark - testing
 
--(void) populate {
-    
-    
-    
-    
-    // source
-    NSString *sid = [self makeNodeId:[NSNumber numberWithInt:0] type:@"movie"];
-    NodePtr source = app->getNode([sid UTF8String]);
-    if (source == NULL) {
-        source = app->createNode([sid UTF8String],[@"movie" UTF8String]);
-        source->renderLabel([@"test title 1" UTF8String]);
-    }
-    
-    source->loaded();
-    
-    // active
-    if (! (source->isActive() || source->isLoading())) {
-        
-        // load
-        source->load();
-        
-        // solyaris
-        app->load(source);
-    }
-    
-    
-    for(int i=1; i<5; i++)
-    {
-        // node
-        NSString *nid = [self makeNodeId:[NSNumber numberWithInt:i] type:@"movie"];
-        NodePtr node = app->getNode([nid UTF8String]);
-        if (node == NULL) {
-            node = app->createNode([nid UTF8String],[@"movie" UTF8String]);
-            node->renderLabel([@"test title 2" UTF8String]);
-        }
-        
-        node->loaded();
-        
-        // connection
-        ConnectionPtr connection = app->getConnection([sid UTF8String], [nid UTF8String]);
-        if (connection == NULL) {
-            
-            // create
-            NSString *cid = [self makeConnectionId:sid to:nid];
-            connection = app->createConnection([cid UTF8String],[@"related" UTF8String],source,node);
-            
-            // connect it
-            source->connect(node);
-        }
-        
-        // active
-        if (! (node->isActive() || node->isLoading())) {
-            
-            // load
-            node->load();
-            
-            // solyaris
-            app->load(node);
-        }
-    }
-}
 
 #pragma mark - SoundPathInteractionDelegate
-- (void)nodeInfo:(NSString*)nid
+- (void)nodeInfo:(unsigned int)nid
 {
     DLog();
     
-    // node
-    NodePtr node = app->getNode([nid UTF8String]);
-    
-    // info
-    if (node->isActive()) {
-        
-    }
 }
 
-- (void)nodeRelated:(NSString*)nid
-{
-    DLog();
-    
-    // node
-    NodePtr node = app->getNode([nid UTF8String]);
-    if (node->isActive()) {
-        
-    }
-}
-
-- (void)nodeClose:(NSString*)nid
-{
-    DLog();
-    
-    // node
-    NodePtr node = app->getNode([nid UTF8String]);
-    
-    // close
-    if (node->isActive()) {
-        node->close();
-    }
-}
-
-- (void)nodeLoad:(NSString*)nid
-{
-    DLog();
-    
-    // node
-    NodePtr node = app->getNode([nid UTF8String]);
-    if (node && ! node->isLoading()) {
-        
-        // flag
-        node->load();
-        
-        // solyaris
-        app->load(node);
-    }
-
-}
-
-- (void)nodeInformation:(NSString*)nid
+- (void) nodeTapped:(unsigned int)nid
 {
 
 }
 
-#pragma mark -
-#pragma mark Helpers
 
-/*
- * Node id.
- */
-- (NSString*)makeNodeId:(NSNumber*)nid type:(NSString*)type {
-    
-    // make it so
-    return [NSString stringWithFormat:@"%@_%i",type,[nid intValue]];
-}
 
-/*
- * Edge id.
- */
-- (NSString*)makeEdgeId:(NSString*)pid to:(NSString *)cid {
-    
-    // theres an edge
-    return [NSString stringWithFormat:@"%@_edge_%@",pid,cid];
-}
-
-/*
- * Connection id.
- */
-- (NSString*)makeConnectionId:(NSString *)sid to:(NSString *)nid {
-    
-    // connect this
-    return [NSString stringWithFormat:@"%@_connection_%@",sid,nid];
-}
 
 #pragma mark - 
 #pragma mark Application
@@ -327,7 +196,7 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     
-    return YES;
+    return UIInterfaceOrientationIsLandscape(interfaceOrientation);
 }
 
 /*

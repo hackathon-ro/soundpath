@@ -31,8 +31,6 @@ public:
     void prepareSettings(Settings *settings);
 	void setup();
     void applyDeviceOrientation(int dorientation);
-    void applySettings();
-    
     
     // Sketch
 	void update();
@@ -49,18 +47,15 @@ public:
     
     id<SPInteropDelegate> interopDelegate;
     
-    // Business
-    NodePtr createNode(string nid, string type);
-    NodePtr createNode(string nid, string type, double x, double y);
-    NodePtr getNode(string nid);
-    ConnectionPtr createConnection(string cid, string type, NodePtr n1, NodePtr n2);
-    ConnectionPtr getConnection(string nid1, string nid2);
-    void load(NodePtr n);
-    void unload(NodePtr n);
-    void graphShift(double mx, double my);
-    Vec3d nodeCoordinates(NodePtr n);
+    Vec3d nodeCoordinates(unsigned int nid);
+    
+    void expand(NodePtr parent, NodeVectorPtr nodes);
+    void hideSubChildren(NodePtr parent);
     
     Graph graph;
+    
+    void initMe();
+    void loaded(unsigned int nid, NSArray* nids);
     
     // Fields
 private:

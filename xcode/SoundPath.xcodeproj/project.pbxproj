@@ -44,7 +44,6 @@
 		B30CB1EC163C494300A25046 /* Action.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B30CB1D9163C494300A25046 /* Action.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		B30CB1ED163C494300A25046 /* Configuration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B30CB1DB163C494300A25046 /* Configuration.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		B30CB1EE163C494300A25046 /* Connection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B30CB1DD163C494300A25046 /* Connection.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		B30CB1EF163C494300A25046 /* Defaults.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B30CB1DF163C494300A25046 /* Defaults.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		B30CB1F1163C494300A25046 /* Graph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B30CB1E3163C494300A25046 /* Graph.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		B30CB1F3163C494300A25046 /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B30CB1E7163C494300A25046 /* Node.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		B30CB236163C499700A25046 /* bg_graph.png in Resources */ = {isa = PBXBuildFile; fileRef = B30CB1FA163C499700A25046 /* bg_graph.png */; };
@@ -590,7 +589,6 @@
 				B30CB1EC163C494300A25046 /* Action.cpp in Sources */,
 				B30CB1ED163C494300A25046 /* Configuration.cpp in Sources */,
 				B30CB1EE163C494300A25046 /* Connection.cpp in Sources */,
-				B30CB1EF163C494300A25046 /* Defaults.cpp in Sources */,
 				B30CB1F1163C494300A25046 /* Graph.cpp in Sources */,
 				B30CB1F3163C494300A25046 /* Node.cpp in Sources */,
 				67ECF442163C606D00CA4A49 /* LoginViewController.mm in Sources */,

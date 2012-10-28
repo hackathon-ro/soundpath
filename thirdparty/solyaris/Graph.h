@@ -32,7 +32,6 @@
 #include "Connection.h"
 #include "Action.h"
 #include "Configuration.h"
-#include "Defaults.h"
 #include "Resources.h"
 #include <vector>
 #include <map>
@@ -60,7 +59,6 @@ class Graph {
     // Cinder
     void resize(int w, int h, int o);
     void config(Configuration c);
-    void defaults(Defaults d);
     void setBackground(string bg);
     
     
@@ -84,23 +82,27 @@ class Graph {
     // Business
     void attract();
     void repulse();
-    void subnodes();
     void move(Vec2d d);
     void drag(Vec2d d);
     void shift(Vec2d d);
     Vec3d coordinates(double px, double py, double d);
-    NodePtr createNode(string nid, string type);
-    NodePtr createNode(string nid, string type, double x, double y);
-    NodePtr getNode(string nid);
-    ConnectionPtr createConnection(string cid, string type, NodePtr n1, NodePtr n2);
-    ConnectionPtr getConnection(string nid1, string nid2);
-    void removeNode(string nid);
+    NodePtr createNode(unsigned int nid, string type);
+    NodePtr createNode(unsigned int nid, string type, double x, double y);
+    NodePtr getNode(unsigned int nid);
+    ConnectionPtr createConnection(NodePtr n1, NodePtr n2);
+    ConnectionPtr getConnection(unsigned int nid1, unsigned int nid2);
+    ConnectionPtr getConnection(unsigned int nid);
+    void removeNode(unsigned int nid);
     void load(NodePtr n);
     void unload(NodePtr n);
     bool onStage(NodePtr n);
     void action(int tid);
     void sample(int s);
     
+    void expand(NodePtr parent, NodeVectorPtr nodes);
+    void hideChildren(NodePtr parent);
+    void hideSubChildren(NodePtr parent);
+    void hideConnections(unsigned int nid);
     
     // private
     private:
@@ -116,7 +118,6 @@ class Graph {
     float speed;
     float friction;
     float harea;
-    bool layout_nodes, layout_subnodes;
     
     // background
     gl::Texture bg_portrait, bg_landscape;
@@ -125,11 +126,6 @@ class Graph {
     // data
     NodeVectorPtr nodes;
     ConnectionVectorPtr connections;
-    
-    // maps
-    map<string,int>nmap;
-    map<string,int>emap;
-    map<string,int>cmap;
     
     // virtual offset
     Vec2d voff;
@@ -158,7 +154,6 @@ class Graph {
     
     // configuration & settings
     Configuration conf;
-    Defaults dflts;
     
     // samples
     audio::SourceRef audioSampleClick;
