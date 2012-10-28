@@ -712,8 +712,11 @@ void Graph::expand(NodePtr parent, NodeVectorPtr nodes)
         
         int index = 0;
         for (NodeIt node = nodes.begin(); node != nodes.end(); ++node) {
+            ConnectionPtr connection = getConnection(parent->nid, (*node)->nid);
             
-            ConnectionPtr connection = createConnection(parent,*node);
+            if (connection == NULL) {
+                connection = createConnection(parent,*node);
+            }
             connection->show();
             
             float yDistrib = nCount * (parent->radius*3.0 + 0.1);

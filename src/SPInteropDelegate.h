@@ -11,6 +11,5 @@
 @protocol SPInteropDelegate <NSObject>
 // Business Methods
 - (void)nodeInfo:(unsigned int)nid;
-- (void)nodeLoad:(unsigned int)nid;
 - (void)nodeTapped:(unsigned int)nid;
 @end

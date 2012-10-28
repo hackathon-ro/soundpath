@@ -19,8 +19,6 @@
     SoundPathApp *app;
 
     CinderViewCocoaTouch * cinderView;
-    
-    unsigned int ids;
 }
 @end
 
@@ -67,8 +65,6 @@
             break;
         }
     }
-    
-    ids = 0;
 }
 
 -(void)viewDidLoad {
@@ -89,39 +85,27 @@
     
     app = (SoundPathApp*)cinder::app::AppCocoaTouch::get();
     app->interopDelegate = self;
+    app->initMe();
 }
 
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self initMe];
+    
+    
+    // test load of root
+    NSArray *nids = [NSArray arrayWithObjects:[NSNumber numberWithInt:1],
+                     [NSNumber numberWithInt:2],
+                     [NSNumber numberWithInt:3],
+                     [NSNumber numberWithInt:4],
+                     [NSNumber numberWithInt:5], nil];
+    
+    app->loaded(0, nids);
 }
 
 - (void) viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-}
-
-#pragma mark - testing
-
--(void) initMe {
-    
-    // source
-    unsigned int sid = 0;
-    NodePtr source = app->getNode(sid);
-    if (source == NULL) {
-        source = app->createNode(sid,[@"node" UTF8String]);
-        source->renderLabel([@"Me" UTF8String]);
-    }
-    
-    // active
-    if (! (source->isActive() || source->isLoading())) {
-        
-        // load
-        source->load();
-    }
-    
-    source->loaded();
 }
 
 #pragma mark - SoundPathInteractionDelegate
@@ -131,54 +115,12 @@
     
 }
 
-- (void)nodeLoad:(unsigned int)nid
-{
-    DLog();
-    
-    // node
-    NodePtr node = app->getNode(nid);
-    if (node && ! node->isLoading()) {
-        
-        // flag
-        node->load();
-        
-        // solyaris
-        app->load(node);
-    }
-}
-
 - (void) nodeTapped:(unsigned int)nid
 {
-    // node
-    NodePtr source = app->getNode(nid);
-    
-    // info
-    if (source->isActive()) {
-        NodeVectorPtr nodes;
-        
-        app->hideSubChildren(source);
-        
-        for(int i=1; i<5; i++)
-        {
-            ids++;
-            
-            // node
-            unsigned int nid = ids;
-            
-            NodePtr node = app->createNode(nid,[@"node" UTF8String]);
-            node->renderLabel([[NSString stringWithFormat:@"title%d", ids] UTF8String]);
-            
-            node->load();
-            node->loaded();
-            
-            nodes.push_back(node);
-            
-            
-        }
-        
-        app->expand(source, nodes);
-    }
+
 }
+
+
 
 
 #pragma mark - 

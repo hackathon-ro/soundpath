@@ -135,6 +135,58 @@ void SoundPathApp::reset() {
     graph.reset();
 }
 
+/*
+ * init
+ */
+
+void SoundPathApp::initMe() {
+    
+    // source
+    unsigned int nid = 0;
+    NodePtr root = graph.getNode(nid);
+    if (root == NULL) {
+        root = graph.createNode(nid,[@"node" UTF8String]);
+        root->renderLabel([@"Me" UTF8String]);
+    }
+    
+    // active
+    if (! (root->isActive() || root->isLoading())) {
+        
+        // load
+        root->load();
+    }
+}
+
+void SoundPathApp::loaded(unsigned int nid, NSArray* nids)
+{
+    NodePtr source = graph.getNode(nid);
+    source->loaded();
+
+    NodeVectorPtr nodes;
+
+    hideSubChildren(source);
+
+    for(NSNumber *number in nids)
+    {
+        unsigned int nid = [number integerValue];
+        
+        NodePtr node = graph.getNode(nid);
+        if(node == NULL)
+        {
+            node = graph.createNode(nid, [@"node" UTF8String]);
+        }
+        
+        node->renderLabel([[NSString stringWithFormat:@"title%d", nid] UTF8String]);
+
+        node->load();
+
+        nodes.push_back(node);
+
+    }
+    
+    graph.expand(source, nodes);
+}
+
 
 #pragma mark -
 #pragma mark Touch
@@ -169,7 +221,10 @@ void SoundPathApp::touchesBegan( TouchEvent event ) {
                     // info
                     [interopDelegate nodeInfo:nid];
                 } else {
-                    [interopDelegate nodeTapped:nid];
+                    if(! node->isActive() && ! node->isLoading())
+                    {
+                        [interopDelegate nodeTapped:nid];
+                    }
                 }
                 
                 // reset
@@ -191,8 +246,6 @@ void SoundPathApp::touchesBegan( TouchEvent event ) {
                 // load
                 if (! node->isActive() && ! node->isLoading()) {
                     
-                    // node load
-                    [interopDelegate nodeLoad:nid];
                 }
                 // open
                 if (node->isClosed()) {
@@ -269,85 +322,13 @@ void SoundPathApp::pinched(UIPinchGestureRecognizer* recognizer) {
 #pragma mark -
 #pragma mark Business
 
-
-/*
- * Creates a node.
- */
-NodePtr SoundPathApp::createNode(unsigned int nid, string type) {
-    GLog();
-    
-    // graph
-    return graph.createNode(nid,type);
-}
-NodePtr SoundPathApp::createNode(unsigned int nid, string type, double x, double y) {
-    GLog();
-    
-    // graph
-    return graph.createNode(nid,type,x,y);
-}
-
-/*
- * Gets a node.
- */
-NodePtr SoundPathApp::getNode(unsigned int nid) {
-    GLog();
-    
-    // graph
-    return graph.getNode(nid);
-}
-
-/*
- * Creates a connection.
- */
-ConnectionPtr SoundPathApp::createConnection(NodePtr n1, NodePtr n2) {
-    GLog();
-    
-    // graph
-    return graph.createConnection(n1,n2);
-}
-
-/*
- * Gets a connection.
- */
-ConnectionPtr SoundPathApp::getConnection(unsigned int nid1, unsigned int nid2) {
-    GLog();
-    
-    // graph
-    return graph.getConnection(nid1,nid2);
-}
-
-void SoundPathApp::load(NodePtr n) {
-    GLog();
-    
-    // graph
-    graph.load(n);
-}
-
-/**
- * Unloads a node.
- */
-void SoundPathApp::unload(NodePtr n) {
-    GLog();
-    
-    // graph
-    graph.unload(n);
-}
-
-/**
- * Shifts the graph.
- */
-void SoundPathApp::graphShift(double mx, double my) {
-    GLog();
-    
-    // graph
-    graph.shift(Vec2d(mx,my));
-}
-
 /**
  * Calculates a node's real world coordinates.
  */
-Vec3d SoundPathApp::nodeCoordinates(NodePtr n) {
+Vec3d SoundPathApp::nodeCoordinates(unsigned int nid) {
     GLog();
+    
+    NodePtr n = graph.getNode(nid);
     
     // calculate real world position
     return graph.coordinates(n->pos.x, n->pos.y, n->radius);
