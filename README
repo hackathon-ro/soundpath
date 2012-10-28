@@ -3,5 +3,3 @@ SoundPath iOS App.
     SoundPath allows the user to discover new music by navigating through a tree of bands related to the users liked bands on Facebook.
 
     The app starts by retrieving the users' liked bands and arranging them as nodes. By tapping on a node the App will query the backend API and get a list of bands that were liked by the previously selected band. The subsequent bands will be arranged as a graph, being connected by edges to the previous node. The user can now repeat the same action on the newly retrieved nodes thus expanding his network.
-
-    At any moment the user can see detailed information about a node, such as metrics from LastFm(listeners, play_count) and a list of the top listened tracks from LastFm. By clicking on one of the tracks the user will be presented with a WebView containing videos of the selected track from LastFm, which he can then listen to.
