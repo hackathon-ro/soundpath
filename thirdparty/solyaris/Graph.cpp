@@ -668,7 +668,7 @@ ConnectionPtr Graph::getConnection(unsigned int nid1, unsigned int nid2) {
         unsigned int cnid1 = (*connection)->nid1;
         unsigned int cnid2 = (*connection)->nid2;
         
-        if (cnid1 == nid1 || cnid1  == nid2 || cnid2 == nid1 || cnid2 == nid2) {
+        if ((cnid1 == nid1 && cnid2  == nid2) || (cnid2 == nid1 && cnid1 == nid2)) {
             return *connection;
         }
     }

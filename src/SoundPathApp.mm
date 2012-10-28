@@ -149,12 +149,8 @@ void SoundPathApp::initMe() {
         root->renderLabel([@"Me" UTF8String]);
     }
     
-    // active
-    if (! (root->isActive() || root->isLoading())) {
-        
-        // load
-        root->load();
-    }
+    // load
+    root->load();
 }
 
 void SoundPathApp::loaded(unsigned int nid, NSArray* nids)
@@ -178,7 +174,9 @@ void SoundPathApp::loaded(unsigned int nid, NSArray* nids)
         
         node->renderLabel([[NSString stringWithFormat:@"title%d", nid] UTF8String]);
 
-        node->load();
+        if (!node->isLoading()) {
+            node->load();
+        }
 
         nodes.push_back(node);
 
@@ -221,7 +219,7 @@ void SoundPathApp::touchesBegan( TouchEvent event ) {
                     // info
                     [interopDelegate nodeInfo:nid];
                 } else {
-                    if(! node->isActive() && ! node->isLoading())
+                    if(! node->isLoading())
                     {
                         [interopDelegate nodeTapped:nid];
                     }
@@ -244,7 +242,7 @@ void SoundPathApp::touchesBegan( TouchEvent event ) {
                 unsigned int nid = node->nid;
                 
                 // load
-                if (! node->isActive() && ! node->isLoading()) {
+                if (! node->isLoading()) {
                     
                 }
                 // open
