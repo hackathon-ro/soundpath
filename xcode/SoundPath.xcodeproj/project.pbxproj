@@ -29,6 +29,10 @@
 		670BC268163C8B20001297F8 /* SPHTTPClient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 670BC267163C8B20001297F8 /* SPHTTPClient.mm */; };
 		670BC26B163C8BE9001297F8 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 670BC26A163C8BE9001297F8 /* MBProgressHUD.m */; };
 		670BC26E163C9106001297F8 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 670BC26D163C9106001297F8 /* SystemConfiguration.framework */; };
+		67CCCD9C163C9BD900EFC11A /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67CCCD9B163C9BD900EFC11A /* CoreData.framework */; };
+		67CCCD9F163C9C6000EFC11A /* SoundPath.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 67CCCD9D163C9C6000EFC11A /* SoundPath.xcdatamodeld */; };
+		67CCCDA8163CA7D900EFC11A /* Band.m in Sources */ = {isa = PBXBuildFile; fileRef = 67CCCDA7163CA7D900EFC11A /* Band.m */; };
+		67CCCDAD163CAA4B00EFC11A /* BandApi.m in Sources */ = {isa = PBXBuildFile; fileRef = 67CCCDAC163CAA4B00EFC11A /* BandApi.m */; };
 		67ECF43D163C5BE000CA4A49 /* FacebookSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 67ECF43C163C5BE000CA4A49 /* FacebookSDKResources.bundle */; };
 		67ECF43E163C5CBD00CA4A49 /* libfacebook_ios_sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 67ECF430163C5B3700CA4A49 /* libfacebook_ios_sdk.a */; };
 		67ECF442163C606D00CA4A49 /* LoginViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 67ECF440163C606D00CA4A49 /* LoginViewController.mm */; };
@@ -130,6 +134,12 @@
 		670BC269163C8BE9001297F8 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		670BC26A163C8BE9001297F8 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		670BC26D163C9106001297F8 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		67CCCD9B163C9BD900EFC11A /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		67CCCD9E163C9C6000EFC11A /* SoundPath.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SoundPath.xcdatamodel; sourceTree = "<group>"; };
+		67CCCDA6163CA7D900EFC11A /* Band.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Band.h; path = ../resources/Band.h; sourceTree = "<group>"; };
+		67CCCDA7163CA7D900EFC11A /* Band.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Band.m; path = ../resources/Band.m; sourceTree = "<group>"; };
+		67CCCDAB163CAA4B00EFC11A /* BandApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BandApi.h; sourceTree = "<group>"; };
+		67CCCDAC163CAA4B00EFC11A /* BandApi.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BandApi.m; sourceTree = "<group>"; };
 		67ECF427163C5B3700CA4A49 /* facebook-ios-sdk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "facebook-ios-sdk.xcodeproj"; path = "../Submodules/FacebookSDK/src/facebook-ios-sdk.xcodeproj"; sourceTree = "<group>"; };
 		67ECF436163C5B5900CA4A49 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		67ECF437163C5B5900CA4A49 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
@@ -187,6 +197,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67CCCD9C163C9BD900EFC11A /* CoreData.framework in Frameworks */,
 				670BC26E163C9106001297F8 /* SystemConfiguration.framework in Frameworks */,
 				67ECF43E163C5CBD00CA4A49 /* libfacebook_ios_sdk.a in Frameworks */,
 				B3A53FFB163C857800B87083 /* Accounts.framework in Frameworks */,
@@ -213,6 +224,8 @@
 		00CFDFA7113848F40091E310 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				67CCCDAA163CA8FC00EFC11A /* API */,
+				67CCCDA9163CA8F000EFC11A /* Model */,
 				B39F3787163BFE23008E419D /* App */,
 				B39F377E163BFD78008E419D /* Classes */,
 				B39F3786163BFE03008E419D /* Views */,
@@ -241,6 +254,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				67CCCD9B163C9BD900EFC11A /* CoreData.framework */,
 				00CFDFB81138492F0091E310 /* Headers */,
 				00CFDFA7113848F40091E310 /* Source */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -257,6 +271,7 @@
 			children = (
 				43CD9798123D6504003B628E /* Icon.png */,
 				B30CB1F5163C499700A25046 /* solyaris */,
+				67CCCD9D163C9C6000EFC11A /* SoundPath.xcdatamodeld */,
 			);
 			name = Resources;
 			path = ../resources;
@@ -321,6 +336,24 @@
 				670BC26A163C8BE9001297F8 /* MBProgressHUD.m */,
 			);
 			name = MBProgress;
+			sourceTree = "<group>";
+		};
+		67CCCDA9163CA8F000EFC11A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				67CCCDA6163CA7D900EFC11A /* Band.h */,
+				67CCCDA7163CA7D900EFC11A /* Band.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		67CCCDAA163CA8FC00EFC11A /* API */ = {
+			isa = PBXGroup;
+			children = (
+				67CCCDAB163CAA4B00EFC11A /* BandApi.h */,
+				67CCCDAC163CAA4B00EFC11A /* BandApi.m */,
+			);
+			name = API;
 			sourceTree = "<group>";
 		};
 		67ECF428163C5B3700CA4A49 /* Products */ = {
@@ -554,6 +587,9 @@
 				670BC259163C877F001297F8 /* UIImageView+AFNetworking.m in Sources */,
 				670BC268163C8B20001297F8 /* SPHTTPClient.mm in Sources */,
 				670BC26B163C8BE9001297F8 /* MBProgressHUD.m in Sources */,
+				67CCCD9F163C9C6000EFC11A /* SoundPath.xcdatamodeld in Sources */,
+				67CCCDA8163CA7D900EFC11A /* Band.m in Sources */,
+				67CCCDAD163CAA4B00EFC11A /* BandApi.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -697,6 +733,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		67CCCD9D163C9C6000EFC11A /* SoundPath.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				67CCCD9E163C9C6000EFC11A /* SoundPath.xcdatamodel */,
+			);
+			currentVersion = 67CCCD9E163C9C6000EFC11A /* SoundPath.xcdatamodel */;
+			path = SoundPath.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
 }

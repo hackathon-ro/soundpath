@@ -96,5 +96,69 @@
      }];
 }
 
++ (void) getRelatedBands:(NSDictionary *)params withId:(NSString*)page_id andBlock:(void (^)(NSArray *))block {
+    
+    NSString * newPath = [NSString stringWithFormat:@"%@/%@/%@",kServiceBands,page_id,@"related"];
+    
+    [[SPHTTPClient sharedHTTPClient]
+     getPath:newPath
+     parameters:params
+     success:^(AFHTTPRequestOperation *operation, id JSON) {
+         //        NSDictionary *mutableTweets = [NSDictionary dictionary];
+         //
+         ////        NSLog(@"%@ JSON %@\n\n\n",[operation responseString], JSON);
+         //
+         //         mutableTweets = [NSDictionary dictionaryWithDictionary:JSON objectForKey:@"userdata"] objectForKey:@"User"]];
+         
+         if (block) {
+             block([NSArray arrayWithArray:JSON]);
+             
+         }
+         
+     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+#if __IPHONE_OS_VERSION_MIN_REQUIRED
+         [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", nil) message:[error localizedDescription] delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"OK", nil), nil] show];
+#else
+         [[NSAlert alertWithMessageText:NSLocalizedString(@"Error", nil) defaultButton:NSLocalizedString(@"OK", nil) alternateButton:nil otherButton:nil informativeTextWithFormat:[error localizedDescription]] runModal];
+#endif
+         if (block) {
+             block(nil);
+         }
+     }];
+
+}
+
++ (void) getBandInfo:(NSDictionary *)params withId:(NSString*)page_id andBlock:(void (^)(NSDictionary *))block {
+    
+    NSString * newPath = [NSString stringWithFormat:@"%@/%@",kServiceBands,page_id];
+    
+    [[SPHTTPClient sharedHTTPClient]
+     getPath:newPath
+     parameters:params
+     success:^(AFHTTPRequestOperation *operation, id JSON) {
+         //        NSDictionary *mutableTweets = [NSDictionary dictionary];
+         //
+         ////        NSLog(@"%@ JSON %@\n\n\n",[operation responseString], JSON);
+         //
+         //         mutableTweets = [NSDictionary dictionaryWithDictionary:JSON objectForKey:@"userdata"] objectForKey:@"User"]];
+         
+         if (block) {
+             block([NSDictionary dictionaryWithDictionary:JSON]);
+             
+         }
+         
+     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+#if __IPHONE_OS_VERSION_MIN_REQUIRED
+         [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", nil) message:[error localizedDescription] delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"OK", nil), nil] show];
+#else
+         [[NSAlert alertWithMessageText:NSLocalizedString(@"Error", nil) defaultButton:NSLocalizedString(@"OK", nil) alternateButton:nil otherButton:nil informativeTextWithFormat:[error localizedDescription]] runModal];
+#endif
+         if (block) {
+             block(nil);
+         }
+     }];
+    
+}
+
 
 @end
