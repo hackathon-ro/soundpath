@@ -145,13 +145,13 @@
 
 
 #pragma mark - SoundPathInteractionDelegate
-- (void)nodeInfo:(unsigned int)nid
+- (void)nodeInfo:(int)nid
 {
     DLog();
     
 }
 
-- (void) nodeTapped:(unsigned int)nid
+- (void) nodeTapped:(int)nid
 {
 
 }
@@ -192,7 +192,7 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     
-    return UIInterfaceOrientationIsLandscape(interfaceOrientation);
+    return YES;
 }
 
 /*

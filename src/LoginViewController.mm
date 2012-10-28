@@ -63,6 +63,11 @@
     [appDelegate facebook].sessionDelegate = appDelegate;
 }
 
+- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+{
+    return YES;
+}
+
 - (void) showFbLoginFail
 {
     if (fbFailAlertView == nil) {

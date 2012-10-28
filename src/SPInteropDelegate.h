@@ -10,6 +10,6 @@
 
 @protocol SPInteropDelegate <NSObject>
 // Business Methods
-- (void)nodeInfo:(unsigned int)nid;
-- (void)nodeTapped:(unsigned int)nid;
+- (void)nodeInfo:(int)nid;
+- (void)nodeTapped:(int)nid;
 @end

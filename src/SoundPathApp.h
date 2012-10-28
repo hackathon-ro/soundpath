@@ -47,7 +47,7 @@ public:
     
     id<SPInteropDelegate> interopDelegate;
     
-    Vec3d nodeCoordinates(unsigned int nid);
+    Vec3d nodeCoordinates(int nid);
     
     void expand(NodePtr parent, NodeVectorPtr nodes);
     void hideSubChildren(NodePtr parent);
@@ -55,7 +55,7 @@ public:
     Graph graph;
     
     void initMe();
-    void loaded(unsigned int nid, NSArray* records);
+    void loaded(int nid, NSArray* records);
     
     // Fields
 private:

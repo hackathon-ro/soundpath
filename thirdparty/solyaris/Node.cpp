@@ -32,7 +32,7 @@
 Node::Node() {
     Node(0,0,0);
 }
-Node::Node(unsigned int idn, double x, double y) {
+Node::Node(int idn, double x, double y) {
     GLog();
     
     // node
@@ -741,7 +741,7 @@ void Node::removeChild(NodePtr child)
     // erase from children
     int eraser = -1;
     int index = 0;
-    unsigned int nid = child->nid;
+    int nid = child->nid;
     
     for (NodeIt node = children.begin(); node != children.end(); ++node) {
         if ((*node)->nid == nid) {

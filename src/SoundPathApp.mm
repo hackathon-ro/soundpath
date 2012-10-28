@@ -143,7 +143,7 @@ void SoundPathApp::reset() {
 void SoundPathApp::initMe() {
     
     // source
-    unsigned int nid = 0;
+    int nid = 0;
     NodePtr root = graph.getNode(nid);
     if (root == NULL) {
         root = graph.createNode(nid,[@"node" UTF8String]);
@@ -154,7 +154,7 @@ void SoundPathApp::initMe() {
     root->load();
 }
 
-void SoundPathApp::loaded(unsigned int nid, NSArray* records)
+void SoundPathApp::loaded(int nid, NSArray* records)
 {
     unsigned int recordCount = [records count];
     
@@ -170,7 +170,7 @@ void SoundPathApp::loaded(unsigned int nid, NSArray* records)
     for(int i=0; i<recordCount; i++)
     {
         Band * band = [records objectAtIndex:i];
-        unsigned int nid = i+1;
+        int nid = band.objectID.hash;
         
         NodePtr node = graph.getNode(nid);
         if(node == NULL)
@@ -215,7 +215,7 @@ void SoundPathApp::touchesBegan( TouchEvent event ) {
             if (node != NULL) {
                 
                 // touch controller
-                unsigned int nid = node->nid;
+                int nid = node->nid;
                 
                 
                 // info
@@ -245,7 +245,7 @@ void SoundPathApp::touchesBegan( TouchEvent event ) {
             if (node != NULL) {
                 
                 // tap controller
-                unsigned int nid = node->nid;
+                int nid = node->nid;
                 
                 // load
                 if (! node->isLoading()) {
@@ -329,7 +329,7 @@ void SoundPathApp::pinched(UIPinchGestureRecognizer* recognizer) {
 /**
  * Calculates a node's real world coordinates.
  */
-Vec3d SoundPathApp::nodeCoordinates(unsigned int nid) {
+Vec3d SoundPathApp::nodeCoordinates(int nid) {
     GLog();
     
     NodePtr n = graph.getNode(nid);
