@@ -16,6 +16,9 @@
 
 #import "BrowserViewController.h"
 
+#import "SPHTTPClient.h"
+#import "BandApi.h"
+
 @interface MainViewController ()
 {
     SoundPathApp *app;
@@ -123,21 +126,14 @@
     app = (SoundPathApp*)cinder::app::AppCocoaTouch::get();
     app->interopDelegate = self;
     app->initMe();
+    
 }
 
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-
     
-    // test load of root
-    NSArray *nids = [NSArray arrayWithObjects:[NSNumber numberWithInt:1],
-                     [NSNumber numberWithInt:2],
-                     [NSNumber numberWithInt:3],
-                     [NSNumber numberWithInt:4],
-                     [NSNumber numberWithInt:5], nil];
-    
-    app->loaded(0, nids);
+    [self ApiTest];
     
 }
 
@@ -299,6 +295,97 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 	
 	// release global
+}
+
+
+#pragma mark - API
+#pragma mark AFTest
+- (void) testBands {
+    
+    // test afnetworking - bands
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString * token = [defaults objectForKey:@"FBAccessTokenKey"];
+    
+    NSDictionary * params = [NSDictionary dictionaryWithObjectsAndKeys:[defaults objectForKey:kUid],@"uid",token,@"token", nil];
+    
+    [SPHTTPClient getBands:params andBlock:^(NSArray *response) {
+        if (response) {
+            DLog();
+            NSLog(@"%@",response);
+            
+            if([response count] > 0){
+                
+                //                [SPHTTPClient getRelatedBands:params withId:[(NSDictionary*)[response objectAtIndex:0] valueForKey:@"page_id"] andBlock:^(NSArray *response) {
+                //                    if (response) {
+                //                        DLog();
+                //                        NSLog(@"%@",response);
+                //
+                //                    }
+                //                }];
+                
+                //                [SPHTTPClient getBandInfo:params withId:[(NSDictionary*)[response objectAtIndex:0] valueForKey:@"page_id"] andBlock:^(NSDictionary *response) {
+                //                    if (response) {
+                //                        DLog();
+                //                        NSLog(@"%@",response);
+                //
+                //                    }
+                //                }];
+                
+                BandApi * bApi = [[BandApi alloc] init];
+                bApi.delegate = nil;
+                
+                for(NSDictionary * d in response){
+                    [bApi getBand:[d valueForKey:@"page_id"]];
+                    
+                }
+                
+            }
+        }
+    }];
+    
+}
+
+- (void) testRelatedBands:(NSString *) page_id {
+    
+    // test afnetworking - bands
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString * token = [defaults objectForKey:@"FBAccessTokenKey"];
+    
+    NSDictionary * params = [NSDictionary dictionaryWithObjectsAndKeys:[defaults objectForKey:kUid],@"uid",token,@"token", nil];
+    
+    [SPHTTPClient getRelatedBands:params withId:page_id andBlock:^(NSArray* response) {
+        if (response) {
+            NSLog(@"%@",response);
+        }
+    }];
+    
+}
+
+- (void) testBandInfo:(NSString *) page_id {
+    
+    // test afnetworking - bands
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString * token = [defaults objectForKey:@"FBAccessTokenKey"];
+    
+    NSDictionary * params = [NSDictionary dictionaryWithObjectsAndKeys:[defaults objectForKey:kUid],@"uid",token,@"token", nil];
+    
+    [SPHTTPClient getBandInfo:params withId:page_id andBlock:^(NSDictionary* response) {
+        if (response) {
+            NSLog(@"%@",response);
+        }
+    }];
+    
+}
+
+- (void) ApiTest {
+    
+    BandApi * bApi = [[BandApi alloc] init];
+    bApi.delegate = nil;
+    
+    NSMutableArray * records = [bApi fetchRecords];
+    
+    app->loaded(0, records);
+    
 }
 
 @end

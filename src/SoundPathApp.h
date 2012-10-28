@@ -55,7 +55,7 @@ public:
     Graph graph;
     
     void initMe();
-    void loaded(unsigned int nid, NSArray* nids);
+    void loaded(unsigned int nid, NSArray* records);
     
     // Fields
 private:

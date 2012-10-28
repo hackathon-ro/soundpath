@@ -80,7 +80,7 @@ void Connection::config(Configuration c) {
     }
     
     // size
-    s = retina ? 2.0 : 1.0;
+    s = retina ? 3.0 : 1.5;
     d = retina ? 8.0 : 4.0;
     
 }

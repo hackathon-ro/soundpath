@@ -8,6 +8,7 @@
 
 #include "SoundPathApp.h"
 #include "SPUtils.h"
+#import "Band.h"
 
 #pragma mark -
 #pragma mark Cinder
@@ -153,18 +154,23 @@ void SoundPathApp::initMe() {
     root->load();
 }
 
-void SoundPathApp::loaded(unsigned int nid, NSArray* nids)
+void SoundPathApp::loaded(unsigned int nid, NSArray* records)
 {
+    unsigned int recordCount = [records count];
+    
+    
     NodePtr source = graph.getNode(nid);
     source->loaded();
+
 
     NodeVectorPtr nodes;
 
     hideSubChildren(source);
 
-    for(NSNumber *number in nids)
+    for(int i=0; i<recordCount; i++)
     {
-        unsigned int nid = [number integerValue];
+        Band * band = [records objectAtIndex:i];
+        unsigned int nid = i+1;
         
         NodePtr node = graph.getNode(nid);
         if(node == NULL)
@@ -172,7 +178,7 @@ void SoundPathApp::loaded(unsigned int nid, NSArray* nids)
             node = graph.createNode(nid, [@"node" UTF8String]);
         }
         
-        node->renderLabel([[NSString stringWithFormat:@"title%d", nid] UTF8String]);
+        node->renderLabel([[NSString stringWithFormat:@"%@", band.name] UTF8String]);
 
         if (!node->isLoading()) {
             node->load();

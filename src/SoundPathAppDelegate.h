@@ -25,6 +25,4 @@
 @property (strong, nonatomic) LoginViewController * login;
 @property (nonatomic, strong) NSArray *userPermissions;
 
-// test AFHTTP methods
-- (void) testBands;
 @end

@@ -193,7 +193,6 @@
         }
         
         [defaults synchronize];
-        [appDelegate testBands];
     }
 
     

@@ -163,8 +163,6 @@
 		B30CB1DC163C494300A25046 /* Configuration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Configuration.h; sourceTree = "<group>"; };
 		B30CB1DD163C494300A25046 /* Connection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Connection.cpp; sourceTree = "<group>"; };
 		B30CB1DE163C494300A25046 /* Connection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Connection.h; sourceTree = "<group>"; };
-		B30CB1DF163C494300A25046 /* Defaults.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Defaults.cpp; sourceTree = "<group>"; };
-		B30CB1E0163C494300A25046 /* Defaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Defaults.h; sourceTree = "<group>"; };
 		B30CB1E3163C494300A25046 /* Graph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Graph.cpp; sourceTree = "<group>"; };
 		B30CB1E4163C494300A25046 /* Graph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Graph.h; sourceTree = "<group>"; };
 		B30CB1E7163C494300A25046 /* Node.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Node.cpp; sourceTree = "<group>"; };
@@ -383,8 +381,6 @@
 				B30CB1DC163C494300A25046 /* Configuration.h */,
 				B30CB1DD163C494300A25046 /* Connection.cpp */,
 				B30CB1DE163C494300A25046 /* Connection.h */,
-				B30CB1DF163C494300A25046 /* Defaults.cpp */,
-				B30CB1E0163C494300A25046 /* Defaults.h */,
 				B30CB1E3163C494300A25046 /* Graph.cpp */,
 				B30CB1E4163C494300A25046 /* Graph.h */,
 				B30CB1E7163C494300A25046 /* Node.cpp */,
