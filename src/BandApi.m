@@ -135,6 +135,93 @@ static NSString * kSoundPathDB = @"SoundPath.sqlite";
     
 }
 
+- (void)getBandByOid:(int) oid {
+    DLog();
+    
+    // queue
+    [queue addOperationWithBlock:^{
+        
+        // context
+        [managedObjectContext lock];
+        
+        // cached
+        Band *band = [self getBandFromCacheByOid:oid];
+        
+        // query
+        if (!band) {
+            [managedObjectContext unlock];
+            return;
+        }
+        [managedObjectContext unlock];
+        
+        NSLog(@"get band %@",band.page_id);
+        
+        // get related bands
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSString * token = [defaults objectForKey:@"FBAccessTokenKey"];
+        
+        NSDictionary * params = [NSDictionary dictionaryWithObjectsAndKeys:[defaults objectForKey:kUid],@"uid",token,@"token", nil];
+        
+        [SPHTTPClient getRelatedBands:params withId:band.page_id andBlock:^(NSArray *rresponse) {
+            if (rresponse) {
+                DLog();
+                NSLog(@"%@",rresponse);
+                
+                for(NSDictionary * dd in rresponse){
+                    [self getRelatedBand:[dd valueForKey:@"page_id"] forBand:band.page_id];
+                }
+                
+            }
+        }];
+        
+        
+//        // delegate
+//        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+//            
+//            // delegate
+//            if (delegate != nil && [delegate respondsToSelector:@selector(loadBand:)]) {
+//                [delegate loadBand:band_id];
+//            }
+//            
+//        }];
+        
+    }];
+    
+}
+
+- (Band*) getBandFromCacheByOid:(int) oid{
+    
+    DLog();
+    
+    // context
+    NSManagedObjectContext *moc = [self managedObjectContext];
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Band" inManagedObjectContext:moc];
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:entityDescription];
+    
+    // predicate
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(oid == %i)", oid];
+    [request setPredicate:predicate];
+    
+    // limit
+    [request setFetchLimit:1];
+    
+    // fetch
+    NSError *error = nil;
+    NSArray *array = [moc executeFetchRequest:request error:&error];
+    
+    // result
+    Band *b = nil;
+    if (array != nil && [array count] > 0) {
+        b = (Band*) [array objectAtIndex:0];
+    }
+    
+    NSLog(@"get band from cache:%@",b.page_id);
+    
+    // return
+    return b;
+}
+
 - (void)getRelatedBand:(NSString*) related_band_id forBand:(NSString*) band_id{
     DLog();
     
@@ -209,6 +296,7 @@ static NSString * kSoundPathDB = @"SoundPath.sqlite";
     // return
     return b;
 }
+
 
 - (Band*) getBandFromServer:(NSString*) band_id{
 
@@ -426,7 +514,7 @@ static NSString * kSoundPathDB = @"SoundPath.sqlite";
     NSLog(@"=>RESULTS:\n");
     
     for(Band * b in mutableFetchResults)
-        NSLog(@"%@",b.name);
+        NSLog(@"%@ %i",b.name,b.objectID.hash);
     
     return mutableFetchResults;
 	

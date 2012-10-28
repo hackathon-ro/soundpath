@@ -170,7 +170,7 @@ void SoundPathApp::loaded(unsigned int nid, NSArray* records)
     for(int i=0; i<recordCount; i++)
     {
         Band * band = [records objectAtIndex:i];
-        unsigned int nid = i+1;
+        unsigned int nid = band.objectID.hash;
         
         NodePtr node = graph.getNode(nid);
         if(node == NULL)

@@ -23,6 +23,7 @@
 @property (nonatomic, retain) NSString * tags;
 @property (nonatomic, retain) NSString * youtube_url;
 @property (nonatomic, retain) NSSet *liked_bands;
+@property (nonatomic, assign) int oid;
 @end
 
 @interface Band (CoreDataGeneratedAccessors)

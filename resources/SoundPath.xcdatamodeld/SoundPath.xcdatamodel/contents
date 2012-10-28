@@ -5,6 +5,7 @@
         <attribute name="likes" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="listeners" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="oid" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="page_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="pic_url" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="plays" optional="YES" attributeType="String" syncable="YES"/>
@@ -13,6 +14,6 @@
         <relationship name="liked_bands" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Band" inverseName="liked_bands" inverseEntity="Band" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Band" positionX="160" positionY="192" width="128" height="195"/>
+        <element name="Band" positionX="160" positionY="192" width="128" height="210"/>
     </elements>
 </model>

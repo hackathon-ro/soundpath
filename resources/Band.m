@@ -20,5 +20,6 @@
 @dynamic tags;
 @dynamic youtube_url;
 @dynamic liked_bands;
+@dynamic oid;
 
 @end

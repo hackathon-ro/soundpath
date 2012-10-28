@@ -34,5 +34,6 @@
 - (NSMutableArray*)fetchRecords;
 - (void)getBand:(NSString*) band_id;
 - (void)getRelatedBand:(NSString*) related_band_id forBand:(NSString*) band_id;
+- (Band*) getBandFromCacheByOid:(int) oid;
 
 @end
