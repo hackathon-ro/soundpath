@@ -143,7 +143,7 @@ void SoundPathApp::reset() {
 void SoundPathApp::initMe() {
     
     // source
-    int nid = 0;
+    int nid = -1;
     NodePtr root = graph.getNode(nid);
     if (root == NULL) {
         root = graph.createNode(nid,[@"node" UTF8String]);
@@ -154,9 +154,9 @@ void SoundPathApp::initMe() {
     root->load();
 }
 
-void SoundPathApp::loaded(int nid, NSArray* records)
+void SoundPathApp::loaded(int nid, NSDictionary * artists)
 {
-    unsigned int recordCount = [records count];
+    unsigned int recordCount = [[artists allKeys] count];
     
     
     NodePtr source = graph.getNode(nid);
@@ -167,11 +167,13 @@ void SoundPathApp::loaded(int nid, NSArray* records)
 
     hideSubChildren(source);
 
-    for(int i=0; i<recordCount; i++)
+    NSArray * keys = [artists allKeys];
+    
+    for(int i=1; i<recordCount; i++)
     {
-        Band * band = [records objectAtIndex:i];
+        NSDictionary * band = [artists objectForKey:[keys objectAtIndex:i]];
 
-        int nid = band.objectID.hash;
+        int nid = [[band objectForKey:@"id"] integerValue];
         
         NodePtr node = graph.getNode(nid);
         if(node == NULL)
@@ -179,7 +181,7 @@ void SoundPathApp::loaded(int nid, NSArray* records)
             node = graph.createNode(nid, [@"node" UTF8String]);
         }
         
-        node->renderLabel([[NSString stringWithFormat:@"%@", band.name] UTF8String]);
+        node->renderLabel([[NSString stringWithFormat:@"%@", [band objectForKey:@"name" ]] UTF8String]);
 
         if (!node->isLoading()) {
             node->load();
@@ -226,10 +228,7 @@ void SoundPathApp::touchesBegan( TouchEvent event ) {
                     // info
                     [interopDelegate nodeInfo:nid];
                 } else {
-                    if(! node->isLoading())
-                    {
-                        [interopDelegate nodeTapped:nid];
-                    }
+                    [interopDelegate nodeTapped:nid];
                 }
                 
                 // reset

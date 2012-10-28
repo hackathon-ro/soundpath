@@ -55,7 +55,7 @@ public:
     Graph graph;
     
     void initMe();
-    void loaded(int nid, NSArray* records);
+    void loaded(int nid, NSDictionary * artists);
     
     // Fields
 private:

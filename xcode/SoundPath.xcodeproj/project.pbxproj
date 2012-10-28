@@ -32,7 +32,6 @@
 		67CCCD9C163C9BD900EFC11A /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67CCCD9B163C9BD900EFC11A /* CoreData.framework */; };
 		67CCCD9F163C9C6000EFC11A /* SoundPath.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 67CCCD9D163C9C6000EFC11A /* SoundPath.xcdatamodeld */; };
 		67CCCDA8163CA7D900EFC11A /* Band.m in Sources */ = {isa = PBXBuildFile; fileRef = 67CCCDA7163CA7D900EFC11A /* Band.m */; };
-		67CCCDAD163CAA4B00EFC11A /* BandApi.m in Sources */ = {isa = PBXBuildFile; fileRef = 67CCCDAC163CAA4B00EFC11A /* BandApi.m */; };
 		67CCCDF7163CEDAF00EFC11A /* BrowserViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 67CCCDF6163CEDAF00EFC11A /* BrowserViewController.mm */; };
 		67CCCDF9163CEDCE00EFC11A /* BrowserViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 67CCCDF8163CEDCE00EFC11A /* BrowserViewController.xib */; };
 		67CCCDFD163D078900EFC11A /* InfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 67CCCDFB163D078900EFC11A /* InfoViewController.m */; };
@@ -141,8 +140,6 @@
 		67CCCD9E163C9C6000EFC11A /* SoundPath.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SoundPath.xcdatamodel; sourceTree = "<group>"; };
 		67CCCDA6163CA7D900EFC11A /* Band.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Band.h; path = ../resources/Band.h; sourceTree = "<group>"; };
 		67CCCDA7163CA7D900EFC11A /* Band.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Band.m; path = ../resources/Band.m; sourceTree = "<group>"; };
-		67CCCDAB163CAA4B00EFC11A /* BandApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BandApi.h; sourceTree = "<group>"; };
-		67CCCDAC163CAA4B00EFC11A /* BandApi.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BandApi.m; sourceTree = "<group>"; };
 		67CCCDF5163CEDAF00EFC11A /* BrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrowserViewController.h; sourceTree = "<group>"; };
 		67CCCDF6163CEDAF00EFC11A /* BrowserViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BrowserViewController.mm; sourceTree = "<group>"; };
 		67CCCDF8163CEDCE00EFC11A /* BrowserViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BrowserViewController.xib; sourceTree = "<group>"; };
@@ -231,7 +228,6 @@
 		00CFDFA7113848F40091E310 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				67CCCDAA163CA8FC00EFC11A /* API */,
 				67CCCDA9163CA8F000EFC11A /* Model */,
 				B39F3787163BFE23008E419D /* App */,
 				B39F377E163BFD78008E419D /* Classes */,
@@ -352,15 +348,6 @@
 				67CCCDA7163CA7D900EFC11A /* Band.m */,
 			);
 			name = Model;
-			sourceTree = "<group>";
-		};
-		67CCCDAA163CA8FC00EFC11A /* API */ = {
-			isa = PBXGroup;
-			children = (
-				67CCCDAB163CAA4B00EFC11A /* BandApi.h */,
-				67CCCDAC163CAA4B00EFC11A /* BandApi.m */,
-			);
-			name = API;
 			sourceTree = "<group>";
 		};
 		67ECF428163C5B3700CA4A49 /* Products */ = {
@@ -601,7 +588,6 @@
 				670BC26B163C8BE9001297F8 /* MBProgressHUD.m in Sources */,
 				67CCCD9F163C9C6000EFC11A /* SoundPath.xcdatamodeld in Sources */,
 				67CCCDA8163CA7D900EFC11A /* Band.m in Sources */,
-				67CCCDAD163CAA4B00EFC11A /* BandApi.m in Sources */,
 				67CCCDF7163CEDAF00EFC11A /* BrowserViewController.mm in Sources */,
 				67CCCDFD163D078900EFC11A /* InfoViewController.m in Sources */,
 			);
@@ -694,7 +680,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				SYMROOT = ./build;
@@ -715,7 +701,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				SYMROOT = ./build;

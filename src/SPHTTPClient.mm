@@ -98,7 +98,7 @@
 
 + (void) getRelatedBands:(NSDictionary *)params withId:(NSString*)page_id andBlock:(void (^)(NSArray *))block {
     
-    NSString * newPath = [NSString stringWithFormat:@"%@/%@/%@",kServiceBands,page_id,@"related"];
+    NSString * newPath = [[NSString alloc] initWithFormat:@"%@/%@/%@",kServiceBands,page_id,@"related"];
     
     [[SPHTTPClient sharedHTTPClient]
      getPath:newPath

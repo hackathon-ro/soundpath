@@ -16,4 +16,5 @@
 
 @property (strong, nonatomic) UIPopoverController * popOver;
 
+@property (nonatomic, strong) NSMutableDictionary * data;
 @end

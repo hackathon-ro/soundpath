@@ -17,7 +17,7 @@
 #import "BrowserViewController.h"
 
 #import "SPHTTPClient.h"
-#import "BandApi.h"
+#import "Band.h"
 
 @interface MainViewController ()
 {
@@ -25,6 +25,7 @@
 
     CinderViewCocoaTouch * cinderView;
 }
+
 @end
 
 /**
@@ -36,6 +37,7 @@
 
 @implementation MainViewController
 @synthesize popOver;
+@synthesize data;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -117,6 +119,9 @@
     
     // notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(activate) name: UIApplicationDidBecomeActiveNotification object:nil];
+    
+    data = [[NSMutableDictionary  alloc] init];
+    
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -133,7 +138,29 @@
 {
     [super viewDidAppear:animated];
     
-    [self ApiTest];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString * token = [defaults objectForKey:@"FBAccessTokenKey"];
+    NSString * uid = [defaults objectForKey:kUid];
+    
+    NSDictionary * params = [NSDictionary dictionaryWithObjectsAndKeys:uid,@"uid",token,@"token", nil];
+    
+    [SPHTTPClient getBands:params andBlock:^(NSArray *response) {
+        if (response) {
+            DLog();
+            NSLog(@"%@",response);
+            
+            if([response count] > 0){
+                
+                for(NSDictionary * d  in response)
+                {
+                    NSString * key = [NSString stringWithFormat:@"%@",[d objectForKey:@"id"]];
+                    [data setObject:d forKey:key];
+                }
+                
+                app->loaded(-1, data);
+            }
+        }
+    }];
     
 }
 
@@ -153,13 +180,40 @@
 
 - (void) nodeTapped:(int)nid
 {
+    NSDictionary * artist = [data objectForKey:[NSString stringWithFormat:@"%d", nid]];
+                              
+    NSString * page_id = [artist valueForKey:@"page_id"];
 
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString * token = [defaults objectForKey:@"FBAccessTokenKey"];
+    NSString * uid = [defaults objectForKey:kUid];
+    
+    NSDictionary * params = [NSDictionary dictionaryWithObjectsAndKeys:uid,@"uid",token,@"token", nil];
+    
+    [SPHTTPClient getRelatedBands:params withId:page_id andBlock:^(NSArray *response) {
+        
+        if (response) {
+            DLog();
+            NSLog(@"%@",response);
+            
+            if([response count] > 0){
+                NSMutableDictionary * result = [[NSMutableDictionary  alloc] init];
+                
+                for(NSDictionary * d  in response)
+                {
+                    NSString * key = [NSString stringWithFormat:@"%@",[d objectForKey:@"id"]];
+                    
+                    [result setObject:d forKey:key];
+                    [data setObject:d forKey:key];
+                }
+                
+                app->loaded(nid, result);
+            }
+        }
+    }];
 }
 
-
-
-
-#pragma mark - 
+#pragma mark -
 #pragma mark Application
 
 /*
@@ -299,93 +353,6 @@
 
 
 #pragma mark - API
-#pragma mark AFTest
-- (void) testBands {
-    
-    // test afnetworking - bands
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString * token = [defaults objectForKey:@"FBAccessTokenKey"];
-    
-    NSDictionary * params = [NSDictionary dictionaryWithObjectsAndKeys:[defaults objectForKey:kUid],@"uid",token,@"token", nil];
-    
-    [SPHTTPClient getBands:params andBlock:^(NSArray *response) {
-        if (response) {
-            DLog();
-            NSLog(@"%@",response);
-            
-            if([response count] > 0){
-                
-                //                [SPHTTPClient getRelatedBands:params withId:[(NSDictionary*)[response objectAtIndex:0] valueForKey:@"page_id"] andBlock:^(NSArray *response) {
-                //                    if (response) {
-                //                        DLog();
-                //                        NSLog(@"%@",response);
-                //
-                //                    }
-                //                }];
-                
-                //                [SPHTTPClient getBandInfo:params withId:[(NSDictionary*)[response objectAtIndex:0] valueForKey:@"page_id"] andBlock:^(NSDictionary *response) {
-                //                    if (response) {
-                //                        DLog();
-                //                        NSLog(@"%@",response);
-                //
-                //                    }
-                //                }];
-                
-                BandApi * bApi = [[BandApi alloc] init];
-                bApi.delegate = nil;
-                
-                for(NSDictionary * d in response){
-                    [bApi getBand:[d valueForKey:@"page_id"]];
-                    
-                }
-                
-            }
-        }
-    }];
-    
-}
 
-- (void) testRelatedBands:(NSString *) page_id {
-    
-    // test afnetworking - bands
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString * token = [defaults objectForKey:@"FBAccessTokenKey"];
-    
-    NSDictionary * params = [NSDictionary dictionaryWithObjectsAndKeys:[defaults objectForKey:kUid],@"uid",token,@"token", nil];
-    
-    [SPHTTPClient getRelatedBands:params withId:page_id andBlock:^(NSArray* response) {
-        if (response) {
-            NSLog(@"%@",response);
-        }
-    }];
-    
-}
-
-- (void) testBandInfo:(NSString *) page_id {
-    
-    // test afnetworking - bands
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString * token = [defaults objectForKey:@"FBAccessTokenKey"];
-    
-    NSDictionary * params = [NSDictionary dictionaryWithObjectsAndKeys:[defaults objectForKey:kUid],@"uid",token,@"token", nil];
-    
-    [SPHTTPClient getBandInfo:params withId:page_id andBlock:^(NSDictionary* response) {
-        if (response) {
-            NSLog(@"%@",response);
-        }
-    }];
-    
-}
-
-- (void) ApiTest {
-    
-    BandApi * bApi = [[BandApi alloc] init];
-    bApi.delegate = nil;
-    
-    NSMutableArray * records = [bApi fetchRecords];
-    
-    app->loaded(0, records);
-    
-}
 
 @end

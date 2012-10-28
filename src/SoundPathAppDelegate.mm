@@ -60,7 +60,7 @@ static NSString* kFacebookAppId = @"465005836872056";
         facebook.expirationDate = [defaults objectForKey:@"FBExpirationDateKey"];
     }
     
-    userPermissions = [[NSArray alloc] initWithObjects: @"user_likes",@"friends_likes", nil];
+    userPermissions = [[NSArray alloc] initWithObjects: @"user_likes",@"friends_likes", @"offline_access", nil];
     
     if (![facebook isSessionValid]) {
         
@@ -156,6 +156,7 @@ static NSString* kFacebookAppId = @"465005836872056";
 
 -(void)fbDidExtendToken:(NSString *)accessToken expiresAt:(NSDate *)expiresAt
 {   NSLog(@"token extended");
+    NSLog(@"%@", [expiresAt description]);
     [self storeAuthData:accessToken expiresAt:expiresAt];
 }
 
