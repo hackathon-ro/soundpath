@@ -27,5 +27,4 @@
 
 // test AFHTTP methods
 - (void) testBands;
-
 @end

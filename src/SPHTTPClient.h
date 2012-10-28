@@ -15,5 +15,7 @@
 //+ (BOOL) checkConnection;
 
 + (void) getBands:(NSDictionary*) params andBlock:(void (^)(NSArray *response))block;
++ (void) getRelatedBands:(NSDictionary*) params withId:(NSString*)page_id andBlock:(void (^)(NSArray *response))block;
++ (void) getBandInfo:(NSDictionary *)params withId:(NSString*)page_id andBlock:(void (^)(NSDictionary *))block;
 
 @end
